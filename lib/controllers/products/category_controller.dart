@@ -11,7 +11,7 @@ import '../../utilities/constants/enums.dart';
 import '../../utilities/services/dio.dart';
 
 class CCategory extends GetxController {
-  notif() {
+  notify() {
     update();
   }
 
@@ -19,27 +19,28 @@ class CCategory extends GetxController {
   DataState singleCategoryProductDataState = DataState.initial;
 
   List<MProducts> singleCategoryProductsLists = <MProducts>[];
+  List<MProducts> searchLists = <MProducts>[];
   List categoryLists = [];
 
   String? selectedCategoryName;
   updateSingleCatProductName({required String value}) {
     selectedCategoryName = value;
-    notif();
+    notify();
   }
 
   getDataController({required DataState dataState}) {
     categoryDataState = dataState;
-    notif();
+    notify();
   }
 
   getSingleCatDataController({required DataState dataState}) {
     singleCategoryProductDataState = dataState;
-    notif();
+    notify();
   }
 
   getCategoryLists() async {
     categoryDataState = DataState.loading;
-    notif();
+    notify();
 
     try {
       Response res = await getHttp(
@@ -59,12 +60,12 @@ class CCategory extends GetxController {
       printer('or here');
       categoryDataState = DataState.error;
     }
-    notif();
+    notify();
   }
 
   getSingleCategoryProductLists({required String categoryName}) async {
     singleCategoryProductDataState = DataState.loading;
-    notif();
+    notify();
     try {
       singleCategoryProductsLists =
           await CategoryApi.singleCategoryApi(categoryName: categoryName);
@@ -78,6 +79,34 @@ class CCategory extends GetxController {
     } catch (e) {
       singleCategoryProductDataState = DataState.error;
     }
-    notif();
+    notify();
+  }
+
+  searchingProducts({required String? value}) {
+    searchLists = singleCategoryProductsLists.where((element) {
+      return element.title!
+          .toString()
+          .toLowerCase()
+          .contains(value!.toString().toLowerCase());
+    }).toList();
+    notify();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    //for Categories Lists//
+    SharedPreferencesService.instance
+        .getString(PKeys.categoryLists)
+        .then((value) {
+      if (value.isNotEmpty) {
+        var data = json.decode(value);
+        categoryLists.addAll(data);
+        getDataController(dataState: DataState.loaded);
+        notify();
+      } else {
+        getCategoryLists();
+      }
+    });
   }
 }

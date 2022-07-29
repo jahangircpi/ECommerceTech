@@ -116,9 +116,11 @@ class AppBarHome extends StatelessWidget {
                                   shape: BoxShape.circle,
                                   border: Border.all(color: Colors.white54),
                                   image: DecorationImage(
-                                    image: NetworkImage(personalPost
-                                            .data!.docs[0]['profileImage'] ??
-                                        ""),
+                                    image: NetworkImage(
+                                      personalPost.data!.docs[0]
+                                              ['profileImage'] ??
+                                          "",
+                                    ),
                                   ),
                                 ),
                               ),

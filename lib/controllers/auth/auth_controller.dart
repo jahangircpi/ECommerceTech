@@ -47,7 +47,7 @@ class CAuth extends GetxController {
         return user;
       });
       pushAndRemoveUntil(
-        screen: const HomeScreen(),
+        screen: HomeScreen(),
       );
       signInDataState = DataState.loaded;
       notify();
@@ -93,7 +93,7 @@ class CAuth extends GetxController {
         return user;
       });
       pushAndRemoveUntil(
-        screen: const HomeScreen(),
+        screen: HomeScreen(),
       );
       signInDataState = DataState.loaded;
       notify();

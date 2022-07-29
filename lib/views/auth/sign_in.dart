@@ -135,9 +135,7 @@ class _SignInScreenState extends State<SignInScreen> {
       builder: ((signInController) {
         if (signInController.signInDataState == DataState.loading) {
           return const Center(
-            child: LoaderBouch(
-              color: Colors.black,
-            ),
+            child: LoaderBouch(),
           );
         } else {
           return const SizedBox.shrink();

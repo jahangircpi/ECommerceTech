@@ -9,51 +9,17 @@ import 'package:get/get.dart';
 import 'package:ud_design/ud_design.dart';
 import '../../../utilities/constants/enums.dart';
 import '../../../utilities/constants/themes.dart';
-import '../../../utilities/functions/callback.dart';
 import '../../../utilities/functions/gap.dart';
 import '../../../utilities/services/navigation.dart';
-import '../../../utilities/services/shared_pref.dart';
 import '../../../utilities/widgets/back_button.dart';
 import '../details_product.dart';
 
-class SingleCategoryProductsScreen extends StatefulWidget {
+class SingleCategoryProductsScreen extends StatelessWidget {
   final String titleofPage;
-  const SingleCategoryProductsScreen({Key? key, required this.titleofPage})
+  SingleCategoryProductsScreen({Key? key, required this.titleofPage})
       : super(key: key);
-
-  @override
-  State<SingleCategoryProductsScreen> createState() =>
-      _SingleCategoryProductsScreenState();
-}
-
-class _SingleCategoryProductsScreenState
-    extends State<SingleCategoryProductsScreen> {
   final CCategory categoryController = Get.put(CCategory());
-  TextEditingController searchTxtCtrl = TextEditingController();
-  List<MProducts>? searchLists = <MProducts>[];
-  @override
-  void initState() {
-    super.initState();
-    callBack(() {
-      SharedPreferencesService.instance
-          .getString(widget.titleofPage)
-          .then((value) {
-        if (value.isNotEmpty) {
-          categoryController.singleCategoryProductsLists =
-              MProducts.decode(value);
-          categoryController.getSingleCatDataController(
-              dataState: DataState.loaded);
-          categoryController.notif();
-        } else {
-          categoryController.getSingleCategoryProductLists(
-              categoryName: categoryController.selectedCategoryName!);
-        }
-        searchLists = categoryController.singleCategoryProductsLists;
-        setState(() {});
-      });
-    });
-  }
-
+  final TextEditingController searchTxtCtrl = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +35,7 @@ class _SingleCategoryProductsScreenState
                 child: Column(
                   children: [
                     gapY(10),
-                    backbutton(context: context, title: widget.titleofPage),
+                    backbutton(context: context, title: titleofPage),
                     gapY(10),
                     GetBuilder<CCategory>(
                       builder: ((categoryController) {
@@ -77,17 +43,7 @@ class _SingleCategoryProductsScreenState
                           hintText: 'ex: LG',
                           controller: searchTxtCtrl,
                           onChanged: (v) {
-                            searchLists = categoryController
-                                .singleCategoryProductsLists
-                                .where((element) {
-                              return element.title!
-                                  .toString()
-                                  .toLowerCase()
-                                  .contains(
-                                    v.toString().toLowerCase(),
-                                  );
-                            }).toList();
-                            setState(() {});
+                            categoryController.searchingProducts(value: v);
                           },
                         );
                       }),
@@ -100,9 +56,7 @@ class _SingleCategoryProductsScreenState
                         } else if (categoryController
                                 .singleCategoryProductDataState ==
                             DataState.loading) {
-                          return const LoaderBouch(
-                            color: Colors.red,
-                          );
+                          return const LoaderBouch();
                         } else if (categoryController
                                 .singleCategoryProductDataState ==
                             DataState.error) {
@@ -130,14 +84,14 @@ class _SingleCategoryProductsScreenState
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemCount: searchLists!.length,
+      itemCount: categoryController.searchLists.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           mainAxisSpacing: UdDesign.pt(2),
           crossAxisSpacing: UdDesign.pt(5),
           childAspectRatio: 0.9),
       itemBuilder: (context, index) {
-        MProducts items = searchLists![index];
+        MProducts items = categoryController.searchLists[index];
         return GestureDetector(
           onTap: () {
             push(

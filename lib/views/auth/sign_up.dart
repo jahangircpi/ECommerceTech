@@ -178,7 +178,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               authController.imageTakingState == DataState.loading
                   ? const Center(
-                      child: LoaderBouch(color: Colors.red),
+                      child: LoaderBouch(),
                     )
                   : const SizedBox.shrink(),
             ],
@@ -260,9 +260,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       builder: ((authController) {
         if (authController.signInDataState == DataState.loading) {
           return const Center(
-            child: LoaderBouch(
-              color: Colors.black,
-            ),
+            child: LoaderBouch(),
           );
         } else {
           return const SizedBox.shrink();

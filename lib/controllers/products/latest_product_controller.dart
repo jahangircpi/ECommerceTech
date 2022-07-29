@@ -5,9 +5,29 @@ import 'package:boilerplate/utilities/functions/print.dart';
 import 'package:boilerplate/utilities/services/shared_pref.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import '../../utilities/constants/enums.dart';
+import '../../utilities/functions/callback.dart';
 
 class CLatestProducts extends GetxController {
-  notif() {
+  @override
+  void onInit() {
+    super.onInit();
+    callBack(() {
+      SharedPreferencesService.instance
+          .getString(PKeys.latestProducts)
+          .then((value) {
+        printer(value);
+        if (value.isNotEmpty) {
+          latestProductsLists = MProducts.decode(value);
+          getDataController(dataState: DataState.loaded);
+          notify();
+        } else {
+          getLatestProductLists();
+        }
+      });
+    });
+  }
+
+  notify() {
     update();
   }
 
@@ -16,12 +36,12 @@ class CLatestProducts extends GetxController {
   List<MProducts> latestProductsLists = <MProducts>[];
   getDataController({required DataState dataState}) {
     latestProductDataState = dataState;
-    notif();
+    notify();
   }
 
   getLatestProductLists() async {
     latestProductDataState = DataState.loading;
-    notif();
+    notify();
     try {
       latestProductsLists = await LatestProductApi.latestProductApi();
       final String encodedData = mProductsToJson(latestProductsLists);
@@ -35,6 +55,6 @@ class CLatestProducts extends GetxController {
       printer(e);
       latestProductDataState = DataState.error;
     }
-    notif();
+    notify();
   }
 }

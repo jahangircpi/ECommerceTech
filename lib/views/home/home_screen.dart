@@ -1,71 +1,24 @@
-import 'dart:convert';
 import 'package:boilerplate/controllers/products/category_controller.dart';
 import 'package:boilerplate/controllers/products/latest_product_controller.dart';
-import 'package:boilerplate/utilities/constants/keys.dart';
-import 'package:boilerplate/utilities/constants/themes.dart';
-import 'package:boilerplate/utilities/functions/callback.dart';
-import 'package:boilerplate/utilities/functions/print.dart';
-import 'package:boilerplate/utilities/services/shared_pref.dart';
 import 'package:boilerplate/utilities/widgets/loader/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ud_design/ud_design.dart';
 import '../../models/products_lists_model.dart';
 import '../../utilities/constants/enums.dart';
+import '../../utilities/constants/themes.dart';
 import '../../utilities/functions/gap.dart';
 import '../../utilities/services/navigation.dart';
+import '../../utilities/services/shared_pref.dart';
 import 'category_products/single_category_screen.dart';
 import 'components/app_bar.dart';
 import 'components/latest_product_section.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class HomeScreen extends StatelessWidget {
+  HomeScreen({Key? key}) : super(key: key);
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
   final CLatestProducts latestProductController = Get.put(CLatestProducts());
   final CCategory categoryController = Get.put(CCategory());
-
-  @override
-  void initState() {
-    super.initState();
-
-    callBack(() {
-      categoryInitData(categoryController);
-      SharedPreferencesService.instance
-          .getString(PKeys.latestProducts)
-          .then((value) {
-        printer(value);
-        if (value.isNotEmpty) {
-          latestProductController.latestProductsLists = MProducts.decode(value);
-          latestProductController.getDataController(
-              dataState: DataState.loaded);
-          latestProductController.notif();
-        } else {
-          latestProductController.getLatestProductLists();
-        }
-      });
-    });
-  }
-
-  void categoryInitData(CCategory categoryController) {
-    SharedPreferencesService.instance
-        .getString(PKeys.categoryLists)
-        .then((value) {
-      if (value.isNotEmpty) {
-        var data = json.decode(value);
-        categoryController.categoryLists.addAll(data);
-        categoryController.getDataController(dataState: DataState.loaded);
-        categoryController.notif();
-      } else {
-        categoryController.getCategoryLists();
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -127,9 +80,33 @@ class _HomeScreenState extends State<HomeScreen> {
                           padding: EdgeInsets.symmetric(
                               horizontal: size.width * 0.01),
                           child: InkWell(
-                            onTap: () {
+                            onTap: () async {
                               categorycontroller.updateSingleCatProductName(
                                   value: lists);
+                              await SharedPreferencesService.instance
+                                  .getString(
+                                      categorycontroller.selectedCategoryName ??
+                                          categorycontroller.categoryLists[0])
+                                  .then((value) {
+                                if (value.isNotEmpty) {
+                                  categorycontroller
+                                          .singleCategoryProductsLists =
+                                      MProducts.decode(value);
+                                  categorycontroller.getSingleCatDataController(
+                                      dataState: DataState.loaded);
+                                  categorycontroller.notify();
+                                } else {
+                                  categorycontroller
+                                      .getSingleCategoryProductLists(
+                                          categoryName: categorycontroller
+                                                  .selectedCategoryName ??
+                                              categorycontroller
+                                                  .categoryLists[0]);
+                                }
+                                categorycontroller.searchLists =
+                                    categorycontroller
+                                        .singleCategoryProductsLists;
+                              });
 
                               push(
                                   screen: SingleCategoryProductsScreen(
