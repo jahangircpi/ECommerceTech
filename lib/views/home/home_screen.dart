@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:boilerplate/controllers/products/category_controller.dart';
+import 'package:boilerplate/controllers/products/latest_product_controller.dart';
 import 'package:boilerplate/utilities/constants/keys.dart';
 import 'package:boilerplate/utilities/constants/themes.dart';
 import 'package:boilerplate/utilities/functions/callback.dart';
@@ -9,11 +10,13 @@ import 'package:boilerplate/utilities/widgets/loader/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ud_design/ud_design.dart';
+import '../../models/products_lists_model.dart';
 import '../../utilities/constants/enums.dart';
 import '../../utilities/functions/gap.dart';
 import '../../utilities/services/navigation.dart';
 import 'category_products/single_category_screen.dart';
 import 'components/app_bar.dart';
+import 'components/latest_product_section.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -27,20 +30,38 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     CCategory categoryController = PKeys.context!.read<CCategory>();
+    CLatestProducts latestProductController =
+        PKeys.context!.read<CLatestProducts>();
     callBack(() {
+      categoryInitData(categoryController);
       SharedPreferencesService.instance
-          .getString(PKeys.categoryLists)
+          .getString(PKeys.latestProducts)
           .then((value) {
         printer(value);
         if (value.isNotEmpty) {
-          var data = json.decode(value);
-          categoryController.categoryLists.addAll(data);
-          categoryController.getDataController(dataState: DataState.loaded);
-          categoryController.notif();
+          latestProductController.latestProductsLists = MProducts.decode(value);
+          latestProductController.getDataController(
+              dataState: DataState.loaded);
+          latestProductController.notif();
         } else {
-          categoryController.getCategoryLists();
+          latestProductController.getLatestProductLists();
         }
       });
+    });
+  }
+
+  void categoryInitData(CCategory categoryController) {
+    SharedPreferencesService.instance
+        .getString(PKeys.categoryLists)
+        .then((value) {
+      if (value.isNotEmpty) {
+        var data = json.decode(value);
+        categoryController.categoryLists.addAll(data);
+        categoryController.getDataController(dataState: DataState.loaded);
+        categoryController.notif();
+      } else {
+        categoryController.getCategoryLists();
+      }
     });
   }
 
@@ -60,6 +81,8 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 children: [
                   _categorySection(size),
+                  gapY(10),
+                  latestProductSection(),
                 ],
               ),
             )
@@ -158,6 +181,31 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         gapY(16),
       ],
+    );
+  }
+
+  Consumer<CLatestProducts> latestProductSection() {
+    return Consumer<CLatestProducts>(
+      builder: ((context, latestProductController, child) {
+        if (latestProductController.latestProductDataState ==
+            DataState.loaded) {
+          return ProductWithListSection(
+            productLists: latestProductController.latestProductsLists,
+          );
+        } else if (latestProductController.latestProductDataState ==
+            DataState.loading) {
+          return const LoaderBouch();
+        } else if (latestProductController.latestProductDataState ==
+            DataState.error) {
+          return const Center(
+            child: Text('There are some problems'),
+          );
+        } else {
+          return const Center(
+            child: Text('The list is empty'),
+          );
+        }
+      }),
     );
   }
 }

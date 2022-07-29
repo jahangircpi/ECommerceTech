@@ -1,4 +1,4 @@
-import 'package:boilerplate/models/single_caterogry_model.dart';
+import 'package:boilerplate/models/products_lists_model.dart';
 import 'package:boilerplate/utilities/constants/themes.dart';
 import 'package:boilerplate/utilities/widgets/network_image.dart';
 import 'package:flutter/material.dart';
@@ -88,6 +88,7 @@ class ProductScreen extends StatelessWidget {
                   src: products!.image ?? "",
                   height: UdDesign.pt(200),
                   width: double.infinity,
+                  fit: BoxFit.contain,
                 ),
         ),
         gapY(15),
@@ -98,7 +99,7 @@ class ProductScreen extends StatelessWidget {
         ),
         gapY(15),
         Text(
-          'Total Rating ${products!.rating!.count ?? ""}',
+          'Total Rating ${products?.rating?.count ?? ""}',
           style: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: UdDesign.pt(16),
@@ -109,7 +110,7 @@ class ProductScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Category : ${products!.category ?? ""}',
+              'Category : ${products?.category ?? ""}',
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: UdDesign.pt(16),
@@ -118,14 +119,14 @@ class ProductScreen extends StatelessWidget {
           ],
         ),
         Text(
-          'Rating : ${products!.rating!.rate ?? ""}',
+          'Rating : ${products?.rating?.rate ?? ""}',
           style: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: UdDesign.pt(16),
           ),
         ),
         Text(
-          'Total Rating : ${products!.rating!.count ?? ""}',
+          'Total Rating : ${products?.rating?.count ?? ""}',
           style: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: UdDesign.pt(16),

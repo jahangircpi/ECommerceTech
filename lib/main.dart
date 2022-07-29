@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'controllers/auth/auth_controller.dart';
 import 'controllers/products/category_controller.dart';
+import 'controllers/products/latest_product_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +19,9 @@ void main() async {
         ),
         ChangeNotifierProvider<CCategory>(
           create: (_) => CCategory(),
+        ),
+        ChangeNotifierProvider<CLatestProducts>(
+          create: (_) => CLatestProducts(),
         ),
       ],
       child: MaterialApp(

@@ -1,6 +1,6 @@
 import 'package:boilerplate/api/urls.dart';
 import 'package:dio/dio.dart';
-import '../models/single_caterogry_model.dart';
+import '../models/products_lists_model.dart';
 import '../utilities/services/dio.dart';
 
 class CategoryApi {

@@ -1,8 +1,9 @@
-import 'package:boilerplate/models/single_caterogry_model.dart';
+import 'package:boilerplate/api/latest_products.dart';
+import 'package:boilerplate/models/products_lists_model.dart';
 import 'package:boilerplate/utilities/constants/keys.dart';
+import 'package:boilerplate/utilities/functions/print.dart';
 import 'package:boilerplate/utilities/services/shared_pref.dart';
 import 'package:flutter/cupertino.dart';
-import '../../api/caterogry_api.dart';
 import '../../utilities/constants/enums.dart';
 
 class CLatestProducts extends ChangeNotifier {
@@ -13,13 +14,16 @@ class CLatestProducts extends ChangeNotifier {
   DataState latestProductDataState = DataState.initial;
 
   List<MProducts> latestProductsLists = <MProducts>[];
+  getDataController({required DataState dataState}) {
+    latestProductDataState = dataState;
+    notif();
+  }
 
-  getLatestProductLists({required String categoryName}) async {
+  getLatestProductLists() async {
     latestProductDataState = DataState.loading;
     notifyListeners();
     try {
-      latestProductsLists =
-          await CategoryApi.singleCategoryApi(categoryName: categoryName);
+      latestProductsLists = await LatestProductApi.latestProductApi();
       final String encodedData = mProductsToJson(latestProductsLists);
       SharedPreferencesService.instance.setString(
         PKeys.latestProducts,
@@ -28,6 +32,7 @@ class CLatestProducts extends ChangeNotifier {
 
       latestProductDataState = DataState.loaded;
     } catch (e) {
+      printer(e);
       latestProductDataState = DataState.error;
     }
     notifyListeners();

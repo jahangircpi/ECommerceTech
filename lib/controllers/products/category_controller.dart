@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:boilerplate/models/single_caterogry_model.dart';
+import 'package:boilerplate/models/products_lists_model.dart';
 import 'package:boilerplate/utilities/constants/keys.dart';
 import 'package:boilerplate/utilities/functions/print.dart';
 import 'package:boilerplate/utilities/services/shared_pref.dart';

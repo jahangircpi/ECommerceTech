@@ -1,5 +1,5 @@
 import 'package:boilerplate/controllers/products/category_controller.dart';
-import 'package:boilerplate/models/single_caterogry_model.dart';
+import 'package:boilerplate/models/products_lists_model.dart';
 import 'package:boilerplate/utilities/constants/assets.dart';
 import 'package:boilerplate/utilities/widgets/loader/loader.dart';
 import 'package:boilerplate/utilities/widgets/network_image.dart';
