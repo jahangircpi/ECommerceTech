@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-List<MSingleCategory> mSingleCategoryFromJson(List str) =>
-    List<MSingleCategory>.from(str.map((x) => MSingleCategory.fromJson(x)));
+List<MProducts> mProductsFromJson(String str) =>
+    List<MProducts>.from(json.decode(str).map((x) => MProducts.fromJson(x)));
 
-String mSingleCategoryToJson(List<MSingleCategory> data) =>
+String mProductsToJson(List<MProducts> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class MSingleCategory {
-  MSingleCategory({
+class MProducts {
+  MProducts({
     this.id,
     this.title,
     this.price,
@@ -25,8 +25,7 @@ class MSingleCategory {
   String? image;
   Rating? rating;
 
-  factory MSingleCategory.fromJson(Map<String, dynamic> json) =>
-      MSingleCategory(
+  factory MProducts.fromJson(Map<String, dynamic> json) => MProducts(
         id: json["id"],
         title: json["title"],
         price: json["price"].toDouble(),
@@ -45,10 +44,10 @@ class MSingleCategory {
         "image": image,
         "rating": rating?.toJson(),
       };
-  static Map<String, dynamic> toMap(MSingleCategory products) => {
+  static Map<String, dynamic> toMap(MProducts products) => {
         'id': products.id,
         'title': products.title,
-        'price': products.price!.toDouble(),
+        'price': products.price?.toDouble(),
         'description': products.description,
         "category": products.category,
         'image': products.image,
@@ -61,9 +60,9 @@ class MSingleCategory {
   //           .toList(),
   //     );
 
-  static List<MSingleCategory> decode(String articleslists) =>
+  static List<MProducts> decode(String articleslists) =>
       (json.decode(articleslists) as List<dynamic>)
-          .map<MSingleCategory>((item) => MSingleCategory.fromJson(item))
+          .map<MProducts>((item) => MProducts.fromJson(item))
           .toList();
 }
 
@@ -77,7 +76,7 @@ class Rating {
   int? count;
 
   factory Rating.fromJson(Map<String, dynamic> json) => Rating(
-        rate: json["rate"],
+        rate: json["rate"].toDouble(),
         count: json["count"],
       );
 

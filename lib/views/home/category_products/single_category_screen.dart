@@ -3,6 +3,7 @@ import 'package:boilerplate/models/single_caterogry_model.dart';
 import 'package:boilerplate/utilities/constants/assets.dart';
 import 'package:boilerplate/utilities/widgets/loader/loader.dart';
 import 'package:boilerplate/utilities/widgets/network_image.dart';
+import 'package:boilerplate/utilities/widgets/textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ud_design/ud_design.dart';
@@ -27,6 +28,8 @@ class SingleCategoryProductsScreen extends StatefulWidget {
 
 class _SingleCategoryProductsScreenState
     extends State<SingleCategoryProductsScreen> {
+  TextEditingController searchTxtCtrl = TextEditingController();
+  List<MProducts>? searchLists = <MProducts>[];
   @override
   void initState() {
     super.initState();
@@ -37,7 +40,7 @@ class _SingleCategoryProductsScreenState
           .then((value) {
         if (value.isNotEmpty) {
           categoryController.singleCategoryProductsLists =
-              MSingleCategory.decode(value);
+              MProducts.decode(value);
           categoryController.getSingleCatDataController(
               dataState: DataState.loaded);
           categoryController.notif();
@@ -45,6 +48,8 @@ class _SingleCategoryProductsScreenState
           categoryController.getSingleCategoryProductLists(
               categoryName: categoryController.selectedCategoryName!);
         }
+        searchLists = categoryController.singleCategoryProductsLists;
+        setState(() {});
       });
     });
   }
@@ -65,11 +70,33 @@ class _SingleCategoryProductsScreenState
                   children: [
                     gapY(10),
                     backbutton(context: context, title: widget.titleofPage),
+                    gapY(10),
+                    Consumer<CCategory>(
+                      builder: ((context, categoryController, child) {
+                        return PTextField(
+                          hintText: 'ex: LG',
+                          controller: searchTxtCtrl,
+                          onChanged: (v) {
+                            searchLists = categoryController
+                                .singleCategoryProductsLists
+                                .where((element) {
+                              return element.title!
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(
+                                    v.toString().toLowerCase(),
+                                  );
+                            }).toList();
+                            setState(() {});
+                          },
+                        );
+                      }),
+                    ),
                     Consumer<CCategory>(
                       builder: ((context, categorycontroller, child) {
                         if (categorycontroller.singleCategoryProductDataState ==
                             DataState.loaded) {
-                          return gridbodylists(categorycontroller);
+                          return gridbodylists();
                         } else if (categorycontroller
                                 .singleCategoryProductDataState ==
                             DataState.loading) {
@@ -99,18 +126,18 @@ class _SingleCategoryProductsScreenState
     );
   }
 
-  Widget gridbodylists(CCategory categorycontroller) {
+  Widget gridbodylists() {
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemCount: categorycontroller.singleCategoryProductsLists.length,
+      itemCount: searchLists!.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           mainAxisSpacing: UdDesign.pt(2),
           crossAxisSpacing: UdDesign.pt(5),
           childAspectRatio: 0.9),
       itemBuilder: (context, index) {
-        var items = categorycontroller.singleCategoryProductsLists[index];
+        MProducts items = searchLists![index];
         return GestureDetector(
           onTap: () {
             push(

@@ -3,11 +3,10 @@ import 'package:dio/dio.dart';
 import '../models/single_caterogry_model.dart';
 import '../utilities/services/dio.dart';
 
-class CategoryApi {
-  static Future<List<MProducts>> singleCategoryApi(
+class LatestProductApi {
+  static Future<List<MProducts>> latestProductApi(
       {required String categoryName}) async {
-    Response res =
-        await getHttp(path: PUrls.singleCategory(category: categoryName));
+    Response res = await getHttp(path: PUrls.latestProduct);
     return mProductsFromJson(res.data);
   }
 }

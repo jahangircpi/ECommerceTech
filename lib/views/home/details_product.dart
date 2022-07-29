@@ -8,7 +8,7 @@ import '../../utilities/functions/gap.dart';
 import '../../utilities/services/navigation.dart';
 
 class ProductScreen extends StatelessWidget {
-  final MSingleCategory? products;
+  final MProducts? products;
   const ProductScreen({Key? key, this.products}) : super(key: key);
   @override
   Widget build(BuildContext context) {

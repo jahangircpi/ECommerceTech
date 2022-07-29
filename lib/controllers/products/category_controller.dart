@@ -18,7 +18,7 @@ class CCategory extends ChangeNotifier {
   DataState categoryDataState = DataState.initial;
   DataState singleCategoryProductDataState = DataState.initial;
 
-  List<MSingleCategory> singleCategoryProductsLists = <MSingleCategory>[];
+  List<MProducts> singleCategoryProductsLists = <MProducts>[];
   List categoryLists = [];
 
   String? selectedCategoryName;
@@ -68,8 +68,7 @@ class CCategory extends ChangeNotifier {
     try {
       singleCategoryProductsLists =
           await CategoryApi.singleCategoryApi(categoryName: categoryName);
-      final String encodedData =
-          mSingleCategoryToJson(singleCategoryProductsLists);
+      final String encodedData = mProductsToJson(singleCategoryProductsLists);
       SharedPreferencesService.instance.setString(
         categoryName,
         encodedData,

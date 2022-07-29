@@ -31,13 +31,13 @@ class PTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label ?? "",
-          style: TextStyle(
-            fontSize: UdDesign.fontSize(16),
-          ),
-        ),
-        gapY(10),
+        // Text(
+        //   label ?? "",
+        //   style: TextStyle(
+        //     fontSize: UdDesign.fontSize(16),
+        //   ),
+        // ),
+        // gapY(10),
         Container(
           height: UdDesign.pt(height),
           padding: const EdgeInsets.only(left: PThemes.padding),

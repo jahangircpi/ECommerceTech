@@ -6,4 +6,5 @@ class PKeys {
   static BuildContext? context = navigatorKey!.currentContext!;
   static final userCollection = FirebaseFirestore.instance.collection('user');
   static const categoryLists = 'categoryLists';
+  static const latestProducts = 'latestProducts';
 }
