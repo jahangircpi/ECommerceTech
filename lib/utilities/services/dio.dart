@@ -1,3 +1,4 @@
+import 'package:boilerplate/api/urls.dart';
 import 'package:dio/dio.dart';
 
 import '../functions/print.dart';
@@ -13,8 +14,7 @@ class DioSingleton {
 
   void tokenUpdate(token) {
     BaseOptions options = BaseOptions(
-        // TODO:Set Base url
-        baseUrl: "",
+        baseUrl: PUrls.baseUrl,
         connectTimeout: 180000,
         receiveTimeout: 180000,
         headers: {"Authorization": "Bearer $token"});
@@ -24,8 +24,7 @@ class DioSingleton {
 
   void create() {
     BaseOptions options = BaseOptions(
-      // TODO:Set Base url
-      baseUrl: "",
+      baseUrl: PUrls.baseUrl,
       connectTimeout: 180000,
       receiveTimeout: 180000,
     );

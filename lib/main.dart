@@ -4,8 +4,8 @@ import 'package:boilerplate/utilities/constants/keys.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'controllers/auth/auth_controller.dart';
+import 'controllers/products/category_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,8 +13,11 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider<SignInController>(
-          create: (_) => SignInController(),
+        ChangeNotifierProvider<CAuth>(
+          create: (_) => CAuth(),
+        ),
+        ChangeNotifierProvider<CCategory>(
+          create: (_) => CCategory(),
         ),
       ],
       child: MaterialApp(

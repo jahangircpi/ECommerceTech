@@ -46,218 +46,228 @@ class _SignUpScreenState extends State<SignUpScreen> {
               padding: const EdgeInsets.symmetric(
                 horizontal: PThemes.padding,
               ),
-              child: Consumer<SignInController>(
-                builder: ((context, signInController, child) {
-                  return SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        gapY(50),
-                        Consumer<SignInController>(
-                          builder: ((context, signInController, child) {
-                            return InkWell(
-                              onTap: () {
-                                showModalBottomSheet(
-                                    context: context,
-                                    builder: (builder) {
-                                      return Container(
-                                        height: size.height * 0.1,
-                                        decoration: const BoxDecoration(
-                                          color: PColors.backgroundColor,
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            PButton(
-                                              text: "Camera",
-                                              height: size.height * 0.08,
-                                              width: size.width * 0.4,
-                                              backgroundColor:
-                                                  PColors.buttonColor,
-                                              onTap: () {
-                                                signInController
-                                                    .getProfileImage(
-                                                        cameraOrGallery: false);
-                                                pop();
-                                              },
-                                            ),
-                                            PButton(
-                                              text: "Gallery",
-                                              height: size.height * 0.08,
-                                              width: size.width * 0.4,
-                                              backgroundColor:
-                                                  PColors.buttonColor,
-                                              onTap: () {
-                                                signInController
-                                                    .getProfileImage(
-                                                        cameraOrGallery: true);
-                                                pop();
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    });
-                              },
-                              child: Stack(
-                                children: [
-                                  Center(
-                                    child: Container(
-                                      width: size.width * 0.5,
-                                      height: size.height * 0.2,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.white,
-                                        ),
-                                        shape: BoxShape.circle,
-                                        image: signInController.profileImage ==
-                                                null
-                                            ? const DecorationImage(
-                                                image: AssetImage(
-                                                  PAssets.personLogo,
-                                                ),
-                                                fit: BoxFit.contain,
-                                              )
-                                            : DecorationImage(
-                                                image: FileImage(
-                                                  signInController
-                                                      .profileImage!,
-                                                ),
-                                                fit: BoxFit.contain,
-                                              ),
-                                      ),
-                                    ),
-                                  ),
-                                  signInController.imageTakingState ==
-                                          DataState.loading
-                                      ? const Center(
-                                          child: LoaderBouch(color: Colors.red),
-                                        )
-                                      : const SizedBox.shrink(),
-                                ],
-                              ),
-                            );
-                          }),
-                        ),
-                        PTextField(
-                          controller: fullNameTxtCtrl,
-                          hintText: 'ex: Jahangir Alam',
-                          label: "Full Name",
-                        ),
-                        gapY(10),
-                        PTextField(
-                          controller: phoneNumTxtCtrl,
-                          hintText: 'ex: +8801700000000',
-                          label: "Phone Number",
-                        ),
-                        gapY(10),
-                        PTextField(
-                          controller: emailTxtCtrl,
-                          hintText: 'ex: jahangircpi@gmail.com',
-                          label: "Email Address",
-                        ),
-                        gapY(10),
-                        PTextField(
-                          obsecureText: signInController.passwordVisible,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    gapY(50),
+                    imageSection(size),
+                    PTextField(
+                      controller: fullNameTxtCtrl,
+                      hintText: 'ex: Jahangir Alam',
+                      label: "Full Name",
+                    ),
+                    gapY(10),
+                    PTextField(
+                      controller: phoneNumTxtCtrl,
+                      hintText: 'ex: +8801700000000',
+                      label: "Phone Number",
+                    ),
+                    gapY(10),
+                    PTextField(
+                      controller: emailTxtCtrl,
+                      hintText: 'ex: jahangircpi@gmail.com',
+                      label: "Email Address",
+                    ),
+                    gapY(10),
+                    Consumer<CAuth>(
+                      builder: ((context, authController, child) {
+                        return PTextField(
+                          obsecureText: authController.passwordVisible,
                           controller: passwordTxtCtrl,
                           label: 'Password',
                           hintText: 'ex: *****',
                           suffixIcon: InkWell(
                             onTap: () {
-                              if (signInController.passwordVisible == true) {
-                                signInController.getPassVisiblity(false);
+                              if (authController.passwordVisible == true) {
+                                authController.getPassVisiblity(false);
                               } else {
-                                signInController.getPassVisiblity(true);
+                                authController.getPassVisiblity(true);
                               }
                             },
-                            child: Icon(signInController.passwordVisible
+                            child: Icon(authController.passwordVisible
                                 ? Icons.remove_red_eye
                                 : Icons.lock),
                           ),
-                        ),
-                        gapY(30),
-                        PButton(
-                            text: "Sign Up",
-                            onTap: () {
-                              if (fullNameTxtCtrl.text.isEmpty) {
-                                pSnacbar(
-                                    text: "Oops",
-                                    title: "The Name's field is empty",
-                                    snackBarType: SnackBarType.warning);
-                              } else if (signInController.profileImage ==
-                                  null) {
-                                pSnacbar(
-                                  text: "Oops",
-                                  title: "Pick a Profile Image.",
-                                  snackBarType: SnackBarType.warning,
-                                );
-                              } else if (phoneNumTxtCtrl.text.isEmpty) {
-                                pSnacbar(
-                                    text: "Oops",
-                                    title: "The Phone Number's field is empty",
-                                    snackBarType: SnackBarType.warning);
-                              } else if (emailTxtCtrl.text.isEmpty) {
-                                pSnacbar(
-                                    text: "Oops",
-                                    title: "The email's field is empty",
-                                    snackBarType: SnackBarType.warning);
-                              } else if (passwordTxtCtrl.text.isEmpty) {
-                                pSnacbar(
-                                    text: "Oops",
-                                    title: "The Password's field is empty",
-                                    snackBarType: SnackBarType.warning);
-                              } else {
-                                signInController.signUp(
-                                    fullName: fullNameTxtCtrl.text,
-                                    phoneNumber: phoneNumTxtCtrl.text,
-                                    email: emailTxtCtrl.text,
-                                    password: passwordTxtCtrl.text);
-                              }
-                            }),
-                        gapY(40),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text('Don\'t have an account?'),
-                            InkWell(
-                              onTap: () {
-                                pushReplacement(
-                                  screen: const SignInScreen(),
-                                );
-                              },
-                              child: Text(
-                                ' Log in',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: UdDesign.pt(16),
-                                ),
-                              ),
-                            )
-                          ],
-                        )
-                      ],
+                        );
+                      }),
                     ),
-                  );
-                }),
+                    gapY(30),
+                    signUPButton(),
+                    gapY(40),
+                    signUpdontHaveSection()
+                  ],
+                ),
               ),
             ),
-            Consumer<SignInController>(
-              builder: ((context, signInController, child) {
-                if (signInController.signInDataState == DataState.loading) {
-                  return const Center(
-                    child: LoaderBouch(
-                      color: Colors.black,
-                    ),
-                  );
-                } else {
-                  return const SizedBox.shrink();
-                }
-              }),
-            ),
+            loader(),
           ],
         ),
       ),
+    );
+  }
+
+  Consumer<CAuth> imageSection(Size size) {
+    return Consumer<CAuth>(
+      builder: ((context, authController, child) {
+        return InkWell(
+          onTap: () {
+            showModalBottomSheet(
+                context: context,
+                builder: (builder) {
+                  return Container(
+                    height: size.height * 0.1,
+                    decoration: const BoxDecoration(
+                      color: PColors.backgroundColor,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        PButton(
+                          text: "Camera",
+                          height: size.height * 0.08,
+                          width: size.width * 0.4,
+                          backgroundColor: PColors.buttonColor,
+                          onTap: () {
+                            authController.getProfileImage(
+                                cameraOrGallery: false);
+                            pop();
+                          },
+                        ),
+                        PButton(
+                          text: "Gallery",
+                          height: size.height * 0.08,
+                          width: size.width * 0.4,
+                          backgroundColor: PColors.buttonColor,
+                          onTap: () {
+                            authController.getProfileImage(
+                                cameraOrGallery: true);
+                            pop();
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                });
+          },
+          child: Stack(
+            children: [
+              Center(
+                child: Container(
+                  width: size.width * 0.5,
+                  height: size.height * 0.2,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.white,
+                    ),
+                    shape: BoxShape.circle,
+                    image: authController.profileImage == null
+                        ? const DecorationImage(
+                            image: AssetImage(
+                              PAssets.personLogo,
+                            ),
+                            fit: BoxFit.contain,
+                          )
+                        : DecorationImage(
+                            image: FileImage(
+                              authController.profileImage!,
+                            ),
+                            fit: BoxFit.contain,
+                          ),
+                  ),
+                ),
+              ),
+              authController.imageTakingState == DataState.loading
+                  ? const Center(
+                      child: LoaderBouch(color: Colors.red),
+                    )
+                  : const SizedBox.shrink(),
+            ],
+          ),
+        );
+      }),
+    );
+  }
+
+  Consumer<CAuth> signUPButton() {
+    return Consumer<CAuth>(
+      builder: ((context, authController, child) {
+        return PButton(
+            text: "Sign Up",
+            onTap: () {
+              if (fullNameTxtCtrl.text.isEmpty) {
+                pSnacbar(
+                    text: "Oops",
+                    title: "The Name's field is empty",
+                    snackBarType: SnackBarType.warning);
+              } else if (authController.profileImage == null) {
+                pSnacbar(
+                  text: "Oops",
+                  title: "Pick a Profile Image.",
+                  snackBarType: SnackBarType.warning,
+                );
+              } else if (phoneNumTxtCtrl.text.isEmpty) {
+                pSnacbar(
+                    text: "Oops",
+                    title: "The Phone Number's field is empty",
+                    snackBarType: SnackBarType.warning);
+              } else if (emailTxtCtrl.text.isEmpty) {
+                pSnacbar(
+                    text: "Oops",
+                    title: "The email's field is empty",
+                    snackBarType: SnackBarType.warning);
+              } else if (passwordTxtCtrl.text.isEmpty) {
+                pSnacbar(
+                    text: "Oops",
+                    title: "The Password's field is empty",
+                    snackBarType: SnackBarType.warning);
+              } else {
+                authController.signUp(
+                    fullName: fullNameTxtCtrl.text,
+                    phoneNumber: phoneNumTxtCtrl.text,
+                    email: emailTxtCtrl.text,
+                    password: passwordTxtCtrl.text);
+              }
+            });
+      }),
+    );
+  }
+
+  Widget signUpdontHaveSection() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text('Don\'t have an account?'),
+        InkWell(
+          onTap: () {
+            pushReplacement(
+              screen: const SignInScreen(),
+            );
+          },
+          child: Text(
+            ' Log in',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: UdDesign.pt(16),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Consumer<CAuth> loader() {
+    return Consumer<CAuth>(
+      builder: ((context, authController, child) {
+        if (authController.signInDataState == DataState.loading) {
+          return const Center(
+            child: LoaderBouch(
+              color: Colors.black,
+            ),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      }),
     );
   }
 }

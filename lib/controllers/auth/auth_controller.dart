@@ -12,7 +12,7 @@ import '../../utilities/services/navigation.dart';
 import '../../views/auth/sign_in.dart';
 import '../../views/home/home_screen.dart';
 
-class SignInController extends ChangeNotifier {
+class CAuth extends ChangeNotifier {
   DataState signUpDataState = DataState.initial;
   DataState signInDataState = DataState.initial;
   DataState imageTakingState = DataState.initial;
@@ -46,27 +46,24 @@ class SignInController extends ChangeNotifier {
         return user;
       });
 
-      pushReplacement(
+      pushAndRemoveUntil(
         screen: const HomeScreen(),
       );
       signInDataState = DataState.loaded;
-
       notify();
       return user;
     } on FirebaseAuthException catch (e) {
       signInDataState = DataState.error;
-
       pSnacbar(
           text: "Opps!",
-          title: e.toString(),
+          title: e.message.toString(),
           snackBarType: SnackBarType.warning);
-
       notify();
       return e.message;
     }
   }
 
-  Future signUp({
+  signUp({
     required String? email,
     required String? password,
     required String? fullName,
@@ -92,23 +89,19 @@ class SignInController extends ChangeNotifier {
             profileImage: downloadUrl,
           );
         });
-
         return user;
       });
-
       pushAndRemoveUntil(
         screen: const HomeScreen(),
       );
       signInDataState = DataState.loaded;
-
       notify();
-
       return user;
     } on FirebaseAuthException catch (e) {
       signInDataState = DataState.error;
       pSnacbar(
           text: "Opps!",
-          title: e.toString(),
+          title: e.message.toString(),
           snackBarType: SnackBarType.warning);
 
       notify();
@@ -132,13 +125,19 @@ class SignInController extends ChangeNotifier {
     String? email,
     String? profileImage,
   }) async {
-    await PKeys.userCollection.doc(userId).set({
-      "userId": userId,
-      "name": fullName,
-      "phoneNumber": phoneNumber,
-      "email": email,
-      'profileImage': profileImage,
-    }, SetOptions(merge: true)).then((value) {});
+    try {
+      await PKeys.userCollection.doc(userId).set({
+        "userId": userId,
+        "name": fullName,
+        "phoneNumber": phoneNumber,
+        "email": email,
+        'profileImage': profileImage,
+      }, SetOptions(merge: true)).then((value) {});
+    } catch (e) {
+      printer(e);
+      signInDataState = DataState.error;
+    }
+    notify();
   }
 
   getProfileImage({bool? cameraOrGallery}) async {

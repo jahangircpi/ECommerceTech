@@ -10,11 +10,11 @@ import 'auth/auth_controller.dart';
 
 class CheckPointController {
   start() {
-    SignInController signInController = PKeys.context!.read<SignInController>();
+    CAuth authController = PKeys.context!.read<CAuth>();
     final FirebaseAuth auth = FirebaseAuth.instance;
     try {
-      signInController.user = auth.currentUser;
-      if (signInController.user != null) {
+      authController.user = auth.currentUser;
+      if (authController.user != null) {
         pushAndRemoveUntil(
           screen: const HomeScreen(),
         );
