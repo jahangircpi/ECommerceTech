@@ -1,4 +1,5 @@
 import 'package:boilerplate/controllers/products/category_controller.dart';
+import 'package:boilerplate/models/single_caterogry_model.dart';
 import 'package:boilerplate/utilities/constants/assets.dart';
 import 'package:boilerplate/utilities/widgets/loader/loader.dart';
 import 'package:boilerplate/utilities/widgets/network_image.dart';
@@ -10,6 +11,7 @@ import '../../../utilities/constants/themes.dart';
 import '../../../utilities/functions/callback.dart';
 import '../../../utilities/functions/gap.dart';
 import '../../../utilities/services/navigation.dart';
+import '../../../utilities/services/shared_pref.dart';
 import '../../../utilities/widgets/back_button.dart';
 import '../details_product.dart';
 
@@ -30,8 +32,20 @@ class _SingleCategoryProductsScreenState
     super.initState();
     CCategory categoryController = context.read<CCategory>();
     callBack(() {
-      categoryController.getSingleCategoryProductLists(
-          categoryName: categoryController.selectedCategoryName!);
+      SharedPreferencesService.instance
+          .getString(widget.titleofPage)
+          .then((value) {
+        if (value.isNotEmpty) {
+          categoryController.singleCategoryProductsLists =
+              MSingleCategory.decode(value);
+          categoryController.getSingleCatDataController(
+              dataState: DataState.loaded);
+          categoryController.notif();
+        } else {
+          categoryController.getSingleCategoryProductLists(
+              categoryName: categoryController.selectedCategoryName!);
+        }
+      });
     });
   }
 
@@ -57,10 +71,8 @@ class _SingleCategoryProductsScreenState
                             DataState.loaded) {
                           return gridbodylists(categorycontroller);
                         } else if (categorycontroller
-                                    .singleCategoryProductDataState ==
-                                DataState.loading ||
-                            categorycontroller.singleCategoryProductDataState ==
-                                DataState.initial) {
+                                .singleCategoryProductDataState ==
+                            DataState.loading) {
                           return const LoaderBouch(
                             color: Colors.red,
                           );
@@ -142,7 +154,7 @@ class _SingleCategoryProductsScreenState
                       ),
                     ),
                     Text(
-                      'Rating: ${items.rating!.rate ?? ""}',
+                      'Rating: ${items.rating?.rate ?? ""}',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: UdDesign.fontSize(11),

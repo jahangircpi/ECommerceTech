@@ -15,6 +15,7 @@ class CheckPointController {
     try {
       authController.user = auth.currentUser;
       if (authController.user != null) {
+    
         pushAndRemoveUntil(
           screen: const HomeScreen(),
         );

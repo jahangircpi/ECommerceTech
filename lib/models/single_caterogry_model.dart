@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 List<MSingleCategory> mSingleCategoryFromJson(List str) =>
-    List<MSingleCategory>.from(
-       str.map((x) => MSingleCategory.fromJson(x)));
+    List<MSingleCategory>.from(str.map((x) => MSingleCategory.fromJson(x)));
 
 String mSingleCategoryToJson(List<MSingleCategory> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -34,7 +33,7 @@ class MSingleCategory {
         description: json["description"],
         category: json["category"],
         image: json["image"],
-        rating: Rating.fromJson(json["rating"]),
+        rating: json["rating"] == null ? null : Rating.fromJson(json["rating"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -44,8 +43,28 @@ class MSingleCategory {
         "description": description,
         "category": category,
         "image": image,
-        "rating": rating!.toJson(),
+        "rating": rating?.toJson(),
       };
+  static Map<String, dynamic> toMap(MSingleCategory products) => {
+        'id': products.id,
+        'title': products.title,
+        'price': products.price!.toDouble(),
+        'description': products.description,
+        "category": products.category,
+        'image': products.image,
+        "content": products.rating?.toJson(),
+      };
+  // static String encode(List<MSingleCategory> articleslists) => json.encode(
+  //       articleslists
+  //           .map<Map<String, dynamic>>(
+  //               (articleslists) => MSingleCategory.toMap(articleslists))
+  //           .toList(),
+  //     );
+
+  static List<MSingleCategory> decode(String articleslists) =>
+      (json.decode(articleslists) as List<dynamic>)
+          .map<MSingleCategory>((item) => MSingleCategory.fromJson(item))
+          .toList();
 }
 
 class Rating {
@@ -58,7 +77,7 @@ class Rating {
   int? count;
 
   factory Rating.fromJson(Map<String, dynamic> json) => Rating(
-        rate: json["rate"].toDouble(),
+        rate: json["rate"],
         count: json["count"],
       );
 

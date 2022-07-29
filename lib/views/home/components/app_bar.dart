@@ -1,3 +1,4 @@
+import 'package:boilerplate/utilities/functions/print.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -38,6 +39,7 @@ class AppBarHome extends StatelessWidget {
                   builder:
                       ((context, AsyncSnapshot<QuerySnapshot> personalPost) {
                     if (personalPost.hasData) {
+                      printer(personalPost.data!.docs.length);
                       var users = personalPost.data!.docs[0];
                       return personalPost.data!.docs.isEmpty
                           ? const SizedBox.shrink()

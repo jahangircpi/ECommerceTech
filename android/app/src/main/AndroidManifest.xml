@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.techpeople.ecommerce">
    <application
-        android:label="boilerplate"
+        android:label="ECommerceTech"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

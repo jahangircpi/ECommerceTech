@@ -45,7 +45,6 @@ class CAuth extends ChangeNotifier {
         }
         return user;
       });
-
       pushAndRemoveUntil(
         screen: const HomeScreen(),
       );
@@ -54,6 +53,7 @@ class CAuth extends ChangeNotifier {
       return user;
     } on FirebaseAuthException catch (e) {
       signInDataState = DataState.error;
+
       pSnacbar(
           text: "Opps!",
           title: e.message.toString(),

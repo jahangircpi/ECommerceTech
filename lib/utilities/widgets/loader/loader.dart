@@ -1,10 +1,10 @@
 import 'package:boilerplate/utilities/widgets/loader/twins.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 class LoaderBouch extends StatefulWidget {
   const LoaderBouch({
     Key? key,
-    this.color,
+    this.color = Colors.red,
     this.size = 50.0,
     this.itemBuilder,
     this.duration = const Duration(milliseconds: 1400),

@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'package:boilerplate/controllers/products/category_controller.dart';
 import 'package:boilerplate/utilities/constants/keys.dart';
 import 'package:boilerplate/utilities/constants/themes.dart';
 import 'package:boilerplate/utilities/functions/callback.dart';
 import 'package:boilerplate/utilities/functions/print.dart';
+import 'package:boilerplate/utilities/services/shared_pref.dart';
 import 'package:boilerplate/utilities/widgets/loader/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,8 +26,21 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    CCategory categoryController = PKeys.context!.read<CCategory>();
     callBack(() {
-      PKeys.context!.read<CCategory>().getCategoryLists();
+      SharedPreferencesService.instance
+          .getString(PKeys.categoryLists)
+          .then((value) {
+        printer(value);
+        if (value.isNotEmpty) {
+          var data = json.decode(value);
+          categoryController.categoryLists.addAll(data);
+          categoryController.getDataController(dataState: DataState.loaded);
+          categoryController.notif();
+        } else {
+          categoryController.getCategoryLists();
+        }
+      });
     });
   }
 
@@ -63,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Text(
               'Category',
               style: TextStyle(
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
                 fontSize: UdDesign.fontSize(16),
               ),
             ),
@@ -91,8 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             onTap: () {
                               categorycontroller.updateSingleCatProductName(
                                   value: lists);
-                              printer(categorycontroller.selectedCategoryName ??
-                                  "");
+
                               push(
                                   screen: SingleCategoryProductsScreen(
                                 titleofPage: lists ?? "",
@@ -100,14 +114,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
                                     color: Colors.white,
                                     width: UdDesign.pt(0.9)),
                               ),
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
-                                  horizontal: UdDesign.pt(12),
+                                  horizontal: UdDesign.pt(15),
                                 ),
                                 child: Row(
                                   children: [
@@ -126,12 +140,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               );
             } else if (categorycontroller.categoryDataState ==
-                    DataState.loading ||
-                categorycontroller.categoryDataState == DataState.initial) {
+                DataState.loading) {
               return const Center(
-                  child: LoaderBouch(
-                color: Colors.red,
-              ));
+                child: LoaderBouch(),
+              );
             } else if (categorycontroller.categoryDataState ==
                 DataState.error) {
               return const Center(
