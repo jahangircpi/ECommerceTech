@@ -8,7 +8,7 @@ import 'package:boilerplate/utilities/functions/print.dart';
 import 'package:boilerplate/utilities/services/shared_pref.dart';
 import 'package:boilerplate/utilities/widgets/loader/loader.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 import 'package:ud_design/ud_design.dart';
 import '../../models/products_lists_model.dart';
 import '../../utilities/constants/enums.dart';
@@ -26,12 +26,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final CLatestProducts latestProductController = Get.put(CLatestProducts());
+  final CCategory categoryController = Get.put(CCategory());
+
   @override
   void initState() {
     super.initState();
-    CCategory categoryController = PKeys.context!.read<CCategory>();
-    CLatestProducts latestProductController =
-        PKeys.context!.read<CLatestProducts>();
+
     callBack(() {
       categoryInitData(categoryController);
       SharedPreferencesService.instance
@@ -108,8 +109,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         gapY(5),
-        Consumer<CCategory>(
-          builder: ((context, categorycontroller, child) {
+        GetBuilder<CCategory>(
+          builder: ((categorycontroller) {
             if (categorycontroller.categoryDataState == DataState.loaded) {
               return Column(
                 children: [
@@ -184,9 +185,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Consumer<CLatestProducts> latestProductSection() {
-    return Consumer<CLatestProducts>(
-      builder: ((context, latestProductController, child) {
+  GetBuilder<CLatestProducts> latestProductSection() {
+    return GetBuilder<CLatestProducts>(
+      builder: ((
+        latestProductController,
+      ) {
         if (latestProductController.latestProductDataState ==
             DataState.loaded) {
           return ProductWithListSection(

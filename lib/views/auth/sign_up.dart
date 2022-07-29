@@ -4,7 +4,7 @@ import 'package:boilerplate/utilities/widgets/button.dart';
 import 'package:boilerplate/utilities/widgets/snacbar.dart';
 import 'package:boilerplate/views/auth/sign_in.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:ud_design/ud_design.dart';
 import '../../controllers/auth/auth_controller.dart';
 import '../../utilities/constants/colors.dart';
@@ -69,8 +69,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       label: "Email Address",
                     ),
                     gapY(10),
-                    Consumer<CAuth>(
-                      builder: ((context, authController, child) {
+                    GetBuilder<CAuth>(
+                      builder: ((authController) {
                         return PTextField(
                           obsecureText: authController.passwordVisible,
                           controller: passwordTxtCtrl,
@@ -106,9 +106,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Consumer<CAuth> imageSection(Size size) {
-    return Consumer<CAuth>(
-      builder: ((context, authController, child) {
+  GetBuilder<CAuth> imageSection(Size size) {
+    return GetBuilder<CAuth>(
+      builder: ((authController) {
         return InkWell(
           onTap: () {
             showModalBottomSheet(
@@ -188,9 +188,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Consumer<CAuth> signUPButton() {
-    return Consumer<CAuth>(
-      builder: ((context, authController, child) {
+  GetBuilder<CAuth> signUPButton() {
+    return GetBuilder<CAuth>(
+      builder: ((authController) {
         return PButton(
             text: "Sign Up",
             onTap: () {
@@ -255,9 +255,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Consumer<CAuth> loader() {
-    return Consumer<CAuth>(
-      builder: ((context, authController, child) {
+  GetBuilder<CAuth> loader() {
+    return GetBuilder<CAuth>(
+      builder: ((authController) {
         if (authController.signInDataState == DataState.loading) {
           return const Center(
             child: LoaderBouch(

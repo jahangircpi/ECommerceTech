@@ -1,7 +1,7 @@
 import 'package:boilerplate/utilities/functions/print.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:ud_design/ud_design.dart';
 
 import '../../../controllers/auth/auth_controller.dart';
@@ -27,8 +27,8 @@ class AppBarHome extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Consumer<CAuth>(
-              builder: ((context, autController, child) {
+            GetBuilder<CAuth>(
+              builder: ((autController) {
                 return StreamBuilder(
                   stream: PKeys.userCollection
                       .where(

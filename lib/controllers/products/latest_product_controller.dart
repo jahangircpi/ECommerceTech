@@ -3,12 +3,12 @@ import 'package:boilerplate/models/products_lists_model.dart';
 import 'package:boilerplate/utilities/constants/keys.dart';
 import 'package:boilerplate/utilities/functions/print.dart';
 import 'package:boilerplate/utilities/services/shared_pref.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import '../../utilities/constants/enums.dart';
 
-class CLatestProducts extends ChangeNotifier {
+class CLatestProducts extends GetxController {
   notif() {
-    notifyListeners();
+    update();
   }
 
   DataState latestProductDataState = DataState.initial;
@@ -21,7 +21,7 @@ class CLatestProducts extends ChangeNotifier {
 
   getLatestProductLists() async {
     latestProductDataState = DataState.loading;
-    notifyListeners();
+    notif();
     try {
       latestProductsLists = await LatestProductApi.latestProductApi();
       final String encodedData = mProductsToJson(latestProductsLists);
@@ -35,6 +35,6 @@ class CLatestProducts extends ChangeNotifier {
       printer(e);
       latestProductDataState = DataState.error;
     }
-    notifyListeners();
+    notif();
   }
 }

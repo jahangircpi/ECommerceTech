@@ -5,7 +5,7 @@ import 'package:boilerplate/utilities/widgets/loader/loader.dart';
 import 'package:boilerplate/utilities/widgets/network_image.dart';
 import 'package:boilerplate/utilities/widgets/textfield.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 import 'package:ud_design/ud_design.dart';
 import '../../../utilities/constants/enums.dart';
 import '../../../utilities/constants/themes.dart';
@@ -28,12 +28,12 @@ class SingleCategoryProductsScreen extends StatefulWidget {
 
 class _SingleCategoryProductsScreenState
     extends State<SingleCategoryProductsScreen> {
+  final CCategory categoryController = Get.put(CCategory());
   TextEditingController searchTxtCtrl = TextEditingController();
   List<MProducts>? searchLists = <MProducts>[];
   @override
   void initState() {
     super.initState();
-    CCategory categoryController = context.read<CCategory>();
     callBack(() {
       SharedPreferencesService.instance
           .getString(widget.titleofPage)
@@ -71,8 +71,8 @@ class _SingleCategoryProductsScreenState
                     gapY(10),
                     backbutton(context: context, title: widget.titleofPage),
                     gapY(10),
-                    Consumer<CCategory>(
-                      builder: ((context, categoryController, child) {
+                    GetBuilder<CCategory>(
+                      builder: ((categoryController) {
                         return PTextField(
                           hintText: 'ex: LG',
                           controller: searchTxtCtrl,
@@ -92,18 +92,18 @@ class _SingleCategoryProductsScreenState
                         );
                       }),
                     ),
-                    Consumer<CCategory>(
-                      builder: ((context, categorycontroller, child) {
-                        if (categorycontroller.singleCategoryProductDataState ==
+                    GetBuilder<CCategory>(
+                      builder: ((categoryController) {
+                        if (categoryController.singleCategoryProductDataState ==
                             DataState.loaded) {
                           return gridbodylists();
-                        } else if (categorycontroller
+                        } else if (categoryController
                                 .singleCategoryProductDataState ==
                             DataState.loading) {
                           return const LoaderBouch(
                             color: Colors.red,
                           );
-                        } else if (categorycontroller
+                        } else if (categoryController
                                 .singleCategoryProductDataState ==
                             DataState.error) {
                           return const Center(

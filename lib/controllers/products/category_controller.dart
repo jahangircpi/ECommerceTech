@@ -4,15 +4,15 @@ import 'package:boilerplate/utilities/constants/keys.dart';
 import 'package:boilerplate/utilities/functions/print.dart';
 import 'package:boilerplate/utilities/services/shared_pref.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import '../../api/caterogry_api.dart';
 import '../../api/urls.dart';
 import '../../utilities/constants/enums.dart';
 import '../../utilities/services/dio.dart';
 
-class CCategory extends ChangeNotifier {
+class CCategory extends GetxController {
   notif() {
-    notifyListeners();
+    update();
   }
 
   DataState categoryDataState = DataState.initial;
@@ -24,7 +24,7 @@ class CCategory extends ChangeNotifier {
   String? selectedCategoryName;
   updateSingleCatProductName({required String value}) {
     selectedCategoryName = value;
-    notifyListeners();
+    notif();
   }
 
   getDataController({required DataState dataState}) {
@@ -39,7 +39,7 @@ class CCategory extends ChangeNotifier {
 
   getCategoryLists() async {
     categoryDataState = DataState.loading;
-    notifyListeners();
+    notif();
 
     try {
       Response res = await getHttp(
@@ -59,12 +59,12 @@ class CCategory extends ChangeNotifier {
       printer('or here');
       categoryDataState = DataState.error;
     }
-    notifyListeners();
+    notif();
   }
 
   getSingleCategoryProductLists({required String categoryName}) async {
     singleCategoryProductDataState = DataState.loading;
-    notifyListeners();
+    notif();
     try {
       singleCategoryProductsLists =
           await CategoryApi.singleCategoryApi(categoryName: categoryName);
@@ -78,6 +78,6 @@ class CCategory extends ChangeNotifier {
     } catch (e) {
       singleCategoryProductDataState = DataState.error;
     }
-    notifyListeners();
+    notif();
   }
 }

@@ -3,7 +3,7 @@ import 'package:boilerplate/utilities/widgets/button.dart';
 import 'package:boilerplate/utilities/widgets/snacbar.dart';
 import 'package:boilerplate/views/auth/sign_up.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:ud_design/ud_design.dart';
 import '../../controllers/auth/auth_controller.dart';
 import '../../utilities/constants/enums.dart';
@@ -47,8 +47,8 @@ class _SignInScreenState extends State<SignInScreen> {
                   label: "Email Address",
                 ),
                 gapY(10),
-                Consumer<CAuth>(
-                  builder: ((context, authController, child) {
+                GetBuilder<CAuth>(
+                  builder: ((authController) {
                     return PTextField(
                       controller: passWordTxtCtrl,
                       obsecureText: authController.passwordVisible,
@@ -82,9 +82,9 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  Consumer<CAuth> signInButton() {
-    return Consumer<CAuth>(
-      builder: ((context, authController, child) {
+  GetBuilder<CAuth> signInButton() {
+    return GetBuilder<CAuth>(
+      builder: ((authController) {
         return PButton(
             text: "Login",
             onTap: () {
@@ -130,9 +130,9 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  Consumer<CAuth> loader() {
-    return Consumer<CAuth>(
-      builder: ((context, signInController, child) {
+  GetBuilder<CAuth> loader() {
+    return GetBuilder<CAuth>(
+      builder: ((signInController) {
         if (signInController.signInDataState == DataState.loading) {
           return const Center(
             child: LoaderBouch(

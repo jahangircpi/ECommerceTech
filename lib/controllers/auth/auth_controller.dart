@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../utilities/constants/enums.dart';
 import '../../utilities/functions/print.dart';
@@ -12,7 +13,7 @@ import '../../utilities/services/navigation.dart';
 import '../../views/auth/sign_in.dart';
 import '../../views/home/home_screen.dart';
 
-class CAuth extends ChangeNotifier {
+class CAuth extends GetxController {
   DataState signUpDataState = DataState.initial;
   DataState signInDataState = DataState.initial;
   DataState imageTakingState = DataState.initial;
@@ -27,7 +28,7 @@ class CAuth extends ChangeNotifier {
   }
 
   notify() {
-    notifyListeners();
+    update();
   }
 
   Future signIn({String? email, String? password}) async {
