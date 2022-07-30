@@ -127,9 +127,7 @@ class AppBarHome extends StatelessWidget {
                               ),
                             );
                     } else {
-                      return const Center(
-                        child: Text('No data found'),
-                      );
+                      return const SizedBox.shrink();
                     }
                   }),
                 );

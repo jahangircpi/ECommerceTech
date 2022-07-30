@@ -1,6 +1,8 @@
 import 'package:boilerplate/controllers/products/category_controller.dart';
 import 'package:boilerplate/models/products_lists_model.dart';
 import 'package:boilerplate/utilities/constants/assets.dart';
+import 'package:boilerplate/utilities/functions/callback.dart';
+import 'package:boilerplate/utilities/functions/print.dart';
 import 'package:boilerplate/utilities/widgets/loader/loader.dart';
 import 'package:boilerplate/utilities/widgets/network_image.dart';
 import 'package:boilerplate/utilities/widgets/textfield.dart';
@@ -18,7 +20,7 @@ import '../details_product.dart';
 
 class SingleCategoryProductsScreen extends StatefulWidget {
   final String titleofPage;
-  SingleCategoryProductsScreen({Key? key, required this.titleofPage})
+  const SingleCategoryProductsScreen({Key? key, required this.titleofPage})
       : super(key: key);
 
   @override
@@ -29,31 +31,34 @@ class SingleCategoryProductsScreen extends StatefulWidget {
 class _SingleCategoryProductsScreenState
     extends State<SingleCategoryProductsScreen> {
   final CCategory categoryController = Get.put(CCategory());
-
   final CSearch searchController = Get.put(CSearch());
   @override
   void initState() {
     super.initState();
-    SharedPreferencesService.instance
-        .getString(widget.titleofPage)
-        .then((value) {
-      searchController.searchLists.clear();
-      if (value.isNotEmpty) {
-        categoryController.singleCategoryProductsLists =
-            MProducts.decode(value);
-        categoryController.getSingleCatDataController(
-            dataState: DataState.loaded);
-        categoryController.notify();
-        searchController.searchLists =
-            List.from(categoryController.singleCategoryProductsLists);
-      } else {
-        categoryController.getSingleCategoryProductLists(
-            categoryName: categoryController.selectedCategoryName!);
-        searchController.searchLists =
-            List.from(categoryController.singleCategoryProductsLists);
-      }
-      setState(() {});
+    callBack(() {
+      printer(widget.titleofPage);
+      SharedPreferencesService.instance
+          .getString(widget.titleofPage)
+          .then((value) async {
+        if (value.isNotEmpty) {
+          categoryController.singleCategoryProductsLists =
+              MProducts.decode(value);
+          categoryController.getSingleCatDataController(
+              dataState: DataState.loaded);
+          searchController.searchLists =
+              categoryController.singleCategoryProductsLists;
+          categoryController.notify();
+        } else {
+          await categoryController
+              .getSingleCategoryProductLists(categoryName: widget.titleofPage)
+              .then((value) {
+            searchController.searchLists =
+                categoryController.singleCategoryProductsLists;
+          });
+        }
+      });
     });
+    setState(() {});
   }
 
   final TextEditingController searchTxtCtrl = TextEditingController();

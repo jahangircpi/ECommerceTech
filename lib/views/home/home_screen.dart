@@ -1,6 +1,8 @@
 import 'package:boilerplate/controllers/products/category_controller.dart';
 import 'package:boilerplate/controllers/products/latest_product_controller.dart';
+import 'package:boilerplate/controllers/products/products_controller.dart';
 import 'package:boilerplate/controllers/products/search_controller.dart';
+import 'package:boilerplate/utilities/functions/print.dart';
 import 'package:boilerplate/utilities/widgets/loader/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,8 +17,8 @@ import 'components/latest_product_section.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
-
   final CLatestProducts latestProductController = Get.put(CLatestProducts());
+  final CProducts allProductController = Get.put(CProducts());
   final CCategory categoryController = Get.put(CCategory());
   final CSearch searchController = Get.put(CSearch());
   @override
@@ -37,6 +39,8 @@ class HomeScreen extends StatelessWidget {
                   _categorySection(size),
                   gapY(10),
                   latestProductSection(),
+                  gapY(10),
+                  allProductSSection(),
                 ],
               ),
             )
@@ -91,6 +95,7 @@ class HomeScreen extends StatelessWidget {
                                       titleofPage: lists ?? "",
                                     ),
                                   );
+                                  printer(lists);
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -123,9 +128,7 @@ class HomeScreen extends StatelessWidget {
               );
             } else if (categorycontroller.categoryDataState ==
                 DataState.loading) {
-              return const Center(
-                child: LoaderBouch(),
-              );
+              return const SizedBox.shrink();
             } else if (categorycontroller.categoryDataState ==
                 DataState.error) {
               return const Center(
@@ -151,11 +154,12 @@ class HomeScreen extends StatelessWidget {
         if (latestProductController.latestProductDataState ==
             DataState.loaded) {
           return ProductWithListSection(
+            title: 'Latest Products',
             productLists: latestProductController.latestProductsLists,
           );
         } else if (latestProductController.latestProductDataState ==
             DataState.loading) {
-          return const LoaderBouch();
+          return const SizedBox.shrink();
         } else if (latestProductController.latestProductDataState ==
             DataState.error) {
           return const Center(
@@ -168,5 +172,36 @@ class HomeScreen extends StatelessWidget {
         }
       }),
     );
+  }
+
+  allProductSSection() {
+    return Obx(() {
+      try {
+        {
+          if (allProductController.productDataState.value == DataState.loaded) {
+            return ProductWithListSection(
+              title: 'All Products',
+              productLists: allProductController.productsLists,
+            );
+          } else if (allProductController.productDataState.value ==
+              DataState.loading) {
+            return const LoaderBouch();
+          } else if (allProductController.productDataState.value ==
+              DataState.error) {
+            return const Center(
+              child: Text('There are some problems'),
+            );
+          } else {
+            return const Center(
+              child: Text('The list is empty'),
+            );
+          }
+        }
+      } catch (e) {
+        return const Center(
+          child: LoaderBouch(),
+        );
+      }
+    });
   }
 }

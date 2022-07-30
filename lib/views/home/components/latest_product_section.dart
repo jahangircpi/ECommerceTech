@@ -12,7 +12,9 @@ import '../details_product.dart';
 class ProductWithListSection extends StatelessWidget {
   final CSearch searchController = Get.put(CSearch());
   final List<MProducts> productLists;
-  ProductWithListSection({Key? key, required this.productLists})
+  final String? title;
+  ProductWithListSection(
+      {Key? key, required this.productLists, this.title = "Latest Products"})
       : super(key: key);
 
   @override
@@ -25,7 +27,7 @@ class ProductWithListSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Latest Products',
+              title ?? "Latest Products",
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: UdDesign.fontSize(13),
@@ -36,10 +38,9 @@ class ProductWithListSection extends StatelessWidget {
                 return InkWell(
                   onTap: () {
                     searchController.searchLists = List.from(productLists);
-
                     push(
                       screen: ProductsShownScreen(
-                        titleofPage: 'Latest Products',
+                        titleofPage: title ?? "",
                         productLists: productLists,
                       ),
                     );

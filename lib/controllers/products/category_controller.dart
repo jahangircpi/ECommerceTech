@@ -19,7 +19,7 @@ class CCategory extends GetxController {
   DataState singleCategoryProductDataState = DataState.initial;
 
   List<MProducts> singleCategoryProductsLists = <MProducts>[];
-  
+
   List categoryLists = [];
 
   String? selectedCategoryName;
@@ -81,8 +81,6 @@ class CCategory extends GetxController {
     }
     notify();
   }
-
-  
 
   @override
   void onInit() {
