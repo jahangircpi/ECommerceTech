@@ -1,5 +1,4 @@
 import 'package:get/instance_manager.dart';
-import '../utilities/functions/print.dart';
 import '../utilities/services/navigation.dart';
 import '../views/auth/sign_in.dart';
 import '../views/home/home_screen.dart';
@@ -21,7 +20,9 @@ class CheckPointController {
         );
       }
     } catch (e) {
-      printer(e);
+      pushAndRemoveUntil(
+        screen: const SignInScreen(),
+      );
     }
     authController.notify();
   }

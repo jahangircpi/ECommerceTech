@@ -64,6 +64,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       controller: phoneNumTxtCtrl,
                       hintText: 'input your phone number',
                       label: "Phone Number",
+                      keyBordType: TextInputType.number,
                     ),
                     gapY(10),
                     PTextField(

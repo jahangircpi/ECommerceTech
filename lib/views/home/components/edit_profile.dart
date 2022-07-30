@@ -53,6 +53,7 @@ class _EditProfileUserState extends State<EditProfileUser> {
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: PThemes.padding,
+                vertical: PThemes.padding,
               ),
               child: SingleChildScrollView(
                 child: Column(
@@ -70,6 +71,7 @@ class _EditProfileUserState extends State<EditProfileUser> {
                       controller: phoneNumTxtCtrl,
                       hintText: 'input your phone number',
                       label: "Phone Number",
+                      keyBordType: TextInputType.number,
                     ),
                     gapY(10),
                     gapY(30),

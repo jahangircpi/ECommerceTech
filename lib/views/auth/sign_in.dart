@@ -41,60 +41,62 @@ class _SignInScreenState extends State<SignInScreen> {
             padding: const EdgeInsets.symmetric(
               horizontal: PThemes.padding,
             ),
-            child: Column(
-              children: <Widget>[
-                gapY(40),
-                Image.asset(
-                  PAssets.splashLogo,
-                ),
-                PTextField(
-                  controller: emailTxtCtrl,
-                  label: "Email",
-                  onChanged: (v) {
-                    _isValidEmail.value = isValidEmail(v);
-                  },
-                  hintText: "input your email",
-                  suffixIcon: ValueListenableBuilder<bool>(
-                    builder: (_, value, child) {
-                      if (value) {
-                        return const Icon(
-                          Icons.check,
-                          color: Colors.green,
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
-                    valueListenable: _isValidEmail,
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  gapY(40),
+                  Image.asset(
+                    PAssets.splashLogo,
                   ),
-                ),
-                gapY(10),
-                GetBuilder<CAuth>(
-                  builder: ((authController) {
-                    return PTextField(
-                      controller: passWordTxtCtrl,
-                      obsecureText: authController.passwordVisible,
-                      hintText: 'input your password',
-                      label: "Password",
-                      suffixIcon: InkWell(
-                        onTap: () {
-                          if (authController.passwordVisible == true) {
-                            authController.getPassVisiblity(false);
-                          } else {
-                            authController.getPassVisiblity(true);
-                          }
-                        },
-                        child: Icon(authController.passwordVisible
-                            ? Icons.remove_red_eye
-                            : Icons.lock),
-                      ),
-                    );
-                  }),
-                ),
-                gapY(20),
-                signInButton(),
-                gapY(40),
-                signInDontHaveSection()
-              ],
+                  PTextField(
+                    controller: emailTxtCtrl,
+                    label: "Email",
+                    onChanged: (v) {
+                      _isValidEmail.value = isValidEmail(v);
+                    },
+                    hintText: "input your email",
+                    suffixIcon: ValueListenableBuilder<bool>(
+                      builder: (_, value, child) {
+                        if (value) {
+                          return const Icon(
+                            Icons.check,
+                            color: Colors.green,
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      },
+                      valueListenable: _isValidEmail,
+                    ),
+                  ),
+                  gapY(10),
+                  GetBuilder<CAuth>(
+                    builder: ((authController) {
+                      return PTextField(
+                        controller: passWordTxtCtrl,
+                        obsecureText: authController.passwordVisible,
+                        hintText: 'input your password',
+                        label: "Password",
+                        suffixIcon: InkWell(
+                          onTap: () {
+                            if (authController.passwordVisible == true) {
+                              authController.getPassVisiblity(false);
+                            } else {
+                              authController.getPassVisiblity(true);
+                            }
+                          },
+                          child: Icon(authController.passwordVisible
+                              ? Icons.remove_red_eye
+                              : Icons.lock),
+                        ),
+                      );
+                    }),
+                  ),
+                  gapY(20),
+                  signInButton(),
+                  gapY(40),
+                  signInDontHaveSection()
+                ],
+              ),
             ),
           ),
           loader(),

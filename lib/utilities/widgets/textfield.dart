@@ -2,7 +2,6 @@ import 'package:boilerplate/utilities/constants/colors.dart';
 import 'package:boilerplate/utilities/constants/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:ud_design/ud_design.dart';
-
 import '../functions/gap.dart';
 
 class PTextField extends StatelessWidget {
@@ -15,6 +14,7 @@ class PTextField extends StatelessWidget {
   final TextEditingController controller;
   final void Function(String)? onChanged;
   final bool labelHide;
+  final TextInputType keyBordType;
   const PTextField({
     Key? key,
     this.label,
@@ -26,6 +26,7 @@ class PTextField extends StatelessWidget {
     this.width = double.infinity,
     this.obsecureText = false,
     this.labelHide = false,
+    this.keyBordType = TextInputType.text,
   }) : super(key: key);
 
   @override
@@ -60,6 +61,7 @@ class PTextField extends StatelessWidget {
           ),
           child: Center(
             child: TextField(
+              keyboardType: keyBordType,
               obscureText: obsecureText,
               onChanged: onChanged,
               controller: controller,

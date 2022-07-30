@@ -56,7 +56,6 @@ class _SingleCategoryProductsScreenState
         }
       });
     });
-    setState(() {});
   }
 
   final TextEditingController searchTxtCtrl = TextEditingController();

@@ -83,7 +83,7 @@ class CAuth extends GetxController {
         password: password!,
       )
           .then((value) async {
-        UploadTask task = await uploadFile2(profileImage!);
+        UploadTask task = await uploadImageToStorage(profileImage!);
         TaskSnapshot storageTaskSnapshot = await task;
         storageTaskSnapshot.ref.getDownloadURL().then((downloadUrl) {
           dataEntry(
@@ -162,7 +162,7 @@ class CAuth extends GetxController {
     notify();
   }
 
-  Future<UploadTask> uploadFile2(File file) async {
+  Future<UploadTask> uploadImageToStorage(File file) async {
     UploadTask uploadTask;
     var timeKey = DateTime.now();
     Reference ref = FirebaseStorage.instance

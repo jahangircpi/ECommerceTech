@@ -1,3 +1,4 @@
+import 'package:boilerplate/utilities/constants/assets.dart';
 import 'package:flutter/material.dart';
 
 networkImagescall(
@@ -10,7 +11,6 @@ networkImagescall(
     fit: fit,
     height: height,
     width: width,
-   
     loadingBuilder:
         (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
       if (loadingProgress == null) return child;
@@ -24,8 +24,8 @@ networkImagescall(
       );
     },
     errorBuilder: (context, exception, stackTrace) {
-      return const Center(
-        child: Text('No image found...'),
+      return Center(
+        child: Image.asset(PAssets.personLogo,),
       );
     },
   );

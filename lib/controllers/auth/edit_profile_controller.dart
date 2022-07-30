@@ -12,8 +12,8 @@ import '../../utilities/functions/print.dart';
 
 class CEditProfile extends GetxController {
   DataState editProfileStatepDataState = DataState.initial;
-
   DataState imageTakingState = DataState.initial;
+
   File? profileImage;
 
   notify() {
@@ -43,7 +43,7 @@ class CEditProfile extends GetxController {
             },
           );
         });
-        deleteFireBaseStorageItem(previousImage!);
+        deletePreviousProfileImage(previousImage!);
       } else {
         await PKeys.userCollection.doc(authController.user!.uid).update(
           {
@@ -55,7 +55,7 @@ class CEditProfile extends GetxController {
 
       editProfileStatepDataState = DataState.loaded;
       pSnacbar(
-          text: "Opps!",
+          text: "Success",
           title: "Your Profile is updated.",
           snackBarType: SnackBarType.success);
       notify();
@@ -80,7 +80,7 @@ class CEditProfile extends GetxController {
     }
   }
 
-  static void deleteFireBaseStorageItem(String fileUrl) {
+  static void deletePreviousProfileImage(String fileUrl) {
     FirebaseStorage.instance.refFromURL(fileUrl).delete();
   }
 

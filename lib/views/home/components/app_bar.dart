@@ -57,18 +57,15 @@ class AppBarHome extends StatelessWidget {
                                       children: <Widget>[
                                         Column(
                                           children: [
-                                            Container(
-                                              height: size.height * 0.1,
-                                              width: size.width * 0.2,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                border: Border.all(
-                                                    color: Colors.white54),
-                                                image: DecorationImage(
-                                                    image: NetworkImage(
-                                                        users['profileImage'] ??
-                                                            ""),
-                                                    fit: BoxFit.cover),
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                              child: networkImagescall(
+                                                src:
+                                                    users['profileImage'] ?? "",
+                                                height: size.height * 0.1,
+                                                width: size.width * 0.2,
+                                                fit: BoxFit.cover,
                                               ),
                                             ),
                                             Padding(
