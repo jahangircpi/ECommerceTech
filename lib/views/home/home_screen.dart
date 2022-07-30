@@ -1,15 +1,14 @@
 import 'package:boilerplate/controllers/products/category_controller.dart';
 import 'package:boilerplate/controllers/products/latest_product_controller.dart';
+import 'package:boilerplate/controllers/products/search_controller.dart';
 import 'package:boilerplate/utilities/widgets/loader/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ud_design/ud_design.dart';
-import '../../models/products_lists_model.dart';
 import '../../utilities/constants/enums.dart';
 import '../../utilities/constants/themes.dart';
 import '../../utilities/functions/gap.dart';
 import '../../utilities/services/navigation.dart';
-import '../../utilities/services/shared_pref.dart';
 import 'category_products/single_category_screen.dart';
 import 'components/app_bar.dart';
 import 'components/latest_product_section.dart';
@@ -19,6 +18,7 @@ class HomeScreen extends StatelessWidget {
 
   final CLatestProducts latestProductController = Get.put(CLatestProducts());
   final CCategory categoryController = Get.put(CCategory());
+  final CSearch searchController = Get.put(CSearch());
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const AppBarHome(),
+            AppBarHome(),
             gapY(10),
             Padding(
               padding: const EdgeInsets.symmetric(
@@ -79,60 +79,41 @@ class HomeScreen extends StatelessWidget {
                         return Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: size.width * 0.01),
-                          child: InkWell(
-                            onTap: () async {
-                              categorycontroller.updateSingleCatProductName(
-                                  value: lists);
-                              await SharedPreferencesService.instance
-                                  .getString(
-                                      categorycontroller.selectedCategoryName ??
-                                          categorycontroller.categoryLists[0])
-                                  .then((value) {
-                                if (value.isNotEmpty) {
-                                  categorycontroller
-                                          .singleCategoryProductsLists =
-                                      MProducts.decode(value);
-                                  categorycontroller.getSingleCatDataController(
-                                      dataState: DataState.loaded);
-                                  categorycontroller.notify();
-                                } else {
-                                  categorycontroller
-                                      .getSingleCategoryProductLists(
-                                          categoryName: categorycontroller
-                                                  .selectedCategoryName ??
-                                              categorycontroller
-                                                  .categoryLists[0]);
-                                }
-                                categorycontroller.searchLists =
-                                    categorycontroller
-                                        .singleCategoryProductsLists;
-                              });
+                          child: GetBuilder<CSearch>(
+                            builder: ((searchController) {
+                              return InkWell(
+                                onTap: () async {
+                                  categorycontroller.updateSingleCatProductName(
+                                      value: lists);
 
-                              push(
-                                  screen: SingleCategoryProductsScreen(
-                                titleofPage: lists ?? "",
-                              ));
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                    color: Colors.white,
-                                    width: UdDesign.pt(0.9)),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: UdDesign.pt(15),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      lists ?? "",
+                                  push(
+                                    screen: SingleCategoryProductsScreen(
+                                      titleofPage: lists ?? "",
                                     ),
-                                  ],
+                                  );
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                        color: Colors.white,
+                                        width: UdDesign.pt(0.9)),
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: UdDesign.pt(15),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          lists ?? "",
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
+                              );
+                            }),
                           ),
                         );
                       },

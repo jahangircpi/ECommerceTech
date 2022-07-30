@@ -21,35 +21,32 @@ class CAuth extends GetxController {
   bool passwordVisible = false;
   User? user;
   final FirebaseAuth auth = FirebaseAuth.instance;
+  notify() {
+    update();
+  }
 
   getPassVisiblity(bool? value) {
     passwordVisible = value!;
     notify();
   }
 
-  notify() {
-    update();
-  }
-
   Future signIn({String? email, String? password}) async {
     signInDataState = DataState.loading;
     notify();
+
     try {
-      user = await auth
+      await auth
           .signInWithEmailAndPassword(email: email!, password: password!)
-          .then((value) async {
-        if (value.user == null) {
-          await auth.createUserWithEmailAndPassword(
-            email: email,
-            password: password,
-          );
-        }
+          .then((value) {
+        user = value.user;
         return user;
       });
-      pushAndRemoveUntil(
+
+      pushReplacement(
         screen: HomeScreen(),
       );
       signInDataState = DataState.loaded;
+
       notify();
       return user;
     } on FirebaseAuthException catch (e) {
@@ -61,6 +58,12 @@ class CAuth extends GetxController {
           snackBarType: SnackBarType.warning);
       notify();
       return e.message;
+    } catch (e) {
+      signInDataState = DataState.error;
+      pSnacbar(
+          text: 'Something went wrong', snackBarType: SnackBarType.warning);
+      notify();
+      return e;
     }
   }
 
@@ -92,7 +95,7 @@ class CAuth extends GetxController {
         });
         return user;
       });
-      pushAndRemoveUntil(
+      pushReplacement(
         screen: HomeScreen(),
       );
       signInDataState = DataState.loaded;

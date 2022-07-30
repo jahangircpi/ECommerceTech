@@ -19,7 +19,7 @@ class CCategory extends GetxController {
   DataState singleCategoryProductDataState = DataState.initial;
 
   List<MProducts> singleCategoryProductsLists = <MProducts>[];
-  List<MProducts> searchLists = <MProducts>[];
+  
   List categoryLists = [];
 
   String? selectedCategoryName;
@@ -82,15 +82,7 @@ class CCategory extends GetxController {
     notify();
   }
 
-  searchingProducts({required String? value}) {
-    searchLists = singleCategoryProductsLists.where((element) {
-      return element.title!
-          .toString()
-          .toLowerCase()
-          .contains(value!.toString().toLowerCase());
-    }).toList();
-    notify();
-  }
+  
 
   @override
   void onInit() {

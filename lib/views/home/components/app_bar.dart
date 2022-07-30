@@ -1,9 +1,8 @@
 import 'package:boilerplate/utilities/functions/print.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/get.dart';
 import 'package:ud_design/ud_design.dart';
-
 import '../../../controllers/auth/auth_controller.dart';
 import '../../../utilities/constants/colors.dart';
 import '../../../utilities/constants/keys.dart';
@@ -11,7 +10,8 @@ import '../../../utilities/functions/gap.dart';
 import '../../../utilities/widgets/dialog.dart';
 
 class AppBarHome extends StatelessWidget {
-  const AppBarHome({Key? key}) : super(key: key);
+  final CAuth authController = Get.put(CAuth());
+  AppBarHome({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +29,12 @@ class AppBarHome extends StatelessWidget {
           children: [
             GetBuilder<CAuth>(
               builder: ((autController) {
+                printer(authController.user!.uid);
                 return StreamBuilder(
                   stream: PKeys.userCollection
                       .where(
                         'userId',
-                        isEqualTo: autController.user!.uid,
+                        isEqualTo: authController.user!.uid,
                       )
                       .snapshots(),
                   builder:

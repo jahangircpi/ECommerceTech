@@ -1,14 +1,18 @@
+import 'package:boilerplate/controllers/products/search_controller.dart';
 import 'package:boilerplate/models/products_lists_model.dart';
 import 'package:boilerplate/utilities/widgets/network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:ud_design/ud_design.dart';
 import '../../../utilities/functions/gap.dart';
 import '../../../utilities/services/navigation.dart';
+import '../all_product_shown_screen.dart';
 import '../details_product.dart';
 
 class ProductWithListSection extends StatelessWidget {
+  final CSearch searchController = Get.put(CSearch());
   final List<MProducts> productLists;
-  const ProductWithListSection({Key? key, required this.productLists})
+  ProductWithListSection({Key? key, required this.productLists})
       : super(key: key);
 
   @override
@@ -17,12 +21,41 @@ class ProductWithListSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Latest Products',
-          style: TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: UdDesign.fontSize(13),
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Latest Products',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: UdDesign.fontSize(13),
+              ),
+            ),
+            GetBuilder<CSearch>(
+              builder: ((searchController) {
+                return InkWell(
+                  onTap: () {
+                    searchController.searchLists = List.from(productLists);
+
+                    push(
+                      screen: ProductsShownScreen(
+                        titleofPage: 'Latest Products',
+                        productLists: productLists,
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'See All',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: UdDesign.fontSize(13),
+                    ),
+                  ),
+                );
+              }),
+            ),
+          ],
         ),
         SizedBox(
           height: UdDesign.pt(190),
