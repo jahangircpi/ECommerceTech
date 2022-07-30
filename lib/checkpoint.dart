@@ -1,8 +1,8 @@
+import 'package:boilerplate/utilities/constants/assets.dart';
 import 'package:boilerplate/utilities/services/dio.dart';
 import 'package:boilerplate/utilities/services/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:ud_design/ud_design.dart';
-
 import 'controllers/checkpoint_controller.dart';
 
 class CheckPoint extends StatefulWidget {
@@ -26,11 +26,10 @@ class _CheckPointState extends State<CheckPoint> {
   @override
   Widget build(BuildContext context) {
     UdDesign.init(context);
-
-    return const Scaffold(
-        body: Center(
-      // TODO: Add splash
-      child: Text("Splash image or text"),
-    ));
+    return Scaffold(
+      body: Center(
+        child: Image.asset(PAssets.splashLogo),
+      ),
+    );
   }
 }

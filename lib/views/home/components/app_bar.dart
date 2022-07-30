@@ -1,4 +1,6 @@
 import 'package:boilerplate/utilities/functions/print.dart';
+import 'package:boilerplate/utilities/services/navigation.dart';
+import 'package:boilerplate/utilities/widgets/network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +10,7 @@ import '../../../utilities/constants/colors.dart';
 import '../../../utilities/constants/keys.dart';
 import '../../../utilities/functions/gap.dart';
 import '../../../utilities/widgets/dialog.dart';
+import 'edit_profile.dart';
 
 class AppBarHome extends StatelessWidget {
   final CAuth authController = Get.put(CAuth());
@@ -68,11 +71,40 @@ class AppBarHome extends StatelessWidget {
                                                     image: NetworkImage(
                                                         users['profileImage'] ??
                                                             ""),
-                                                    fit: BoxFit.contain),
+                                                    fit: BoxFit.cover),
                                               ),
                                             ),
-                                            gapY(10),
-                                            Text(users['name'] ?? ""),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: UdDesign.pt(4),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  const SizedBox.shrink(),
+                                                  Text(
+                                                    users['name'] ?? "",
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                  InkWell(
+                                                    onTap: () {
+                                                      push(
+                                                        screen: EditProfileUser(
+                                                          users: users,
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: Icon(
+                                                      Icons.edit,
+                                                      color: Colors.white,
+                                                      size: size.height * 0.025,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
                                             gapY(5),
                                             Text(users['phoneNumber'] ?? ""),
                                             gapY(5),
@@ -110,19 +142,14 @@ class AppBarHome extends StatelessWidget {
                                   ),
                                 );
                               },
-                              child: Container(
-                                height: size.height * 0.04,
-                                width: size.width * 0.1,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(color: Colors.white54),
-                                  image: DecorationImage(
-                                    image: NetworkImage(
-                                      personalPost.data!.docs[0]
-                                              ['profileImage'] ??
-                                          "",
-                                    ),
-                                  ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(50),
+                                child: networkImagescall(
+                                  src: personalPost.data!.docs[0]
+                                          ['profileImage'] ??
+                                      "",
+                                  height: size.height * 0.05,
+                                  width: size.height * 0.05,
                                 ),
                               ),
                             );
