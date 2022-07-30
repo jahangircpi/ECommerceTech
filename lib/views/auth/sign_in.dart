@@ -1,3 +1,4 @@
+import 'package:boilerplate/utilities/constants/assets.dart';
 import 'package:boilerplate/utilities/constants/themes.dart';
 import 'package:boilerplate/utilities/widgets/button.dart';
 import 'package:boilerplate/utilities/widgets/snacbar.dart';
@@ -41,8 +42,11 @@ class _SignInScreenState extends State<SignInScreen> {
               horizontal: PThemes.padding,
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                gapY(40),
+                Image.asset(
+                  PAssets.splashLogo,
+                ),
                 PTextField(
                   controller: emailTxtCtrl,
                   label: "Email",

@@ -89,49 +89,49 @@ class _EditProfileUserState extends State<EditProfileUser> {
   GetBuilder<CEditProfile> imageSection(Size size) {
     return GetBuilder<CEditProfile>(
       builder: ((editProfileController) {
-        return InkWell(
-          onTap: () {
-            showModalBottomSheet(
-                context: context,
-                builder: (builder) {
-                  return Container(
-                    height: size.height * 0.1,
-                    decoration: const BoxDecoration(
-                      color: PColors.backgroundColor,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        PButton(
-                          text: "Camera",
-                          height: size.height * 0.08,
-                          width: size.width * 0.4,
-                          backgroundColor: PColors.buttonColor,
-                          onTap: () {
-                            editProfileController.getProfileImage(
-                                cameraOrGallery: false);
-                            pop();
-                          },
-                        ),
-                        PButton(
-                          text: "Gallery",
-                          height: size.height * 0.08,
-                          width: size.width * 0.4,
-                          backgroundColor: PColors.buttonColor,
-                          onTap: () {
-                            editProfileController.getProfileImage(
-                                cameraOrGallery: true);
-                            pop();
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                });
-          },
-          child: Stack(
-            children: [
-              Center(
+        return Stack(
+          children: [
+            Center(
+              child: InkWell(
+                onTap: () {
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (builder) {
+                        return Container(
+                          height: size.height * 0.1,
+                          decoration: const BoxDecoration(
+                            color: PColors.backgroundColor,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              PButton(
+                                text: "Camera",
+                                height: size.height * 0.08,
+                                width: size.width * 0.4,
+                                backgroundColor: PColors.buttonColor,
+                                onTap: () {
+                                  editProfileController.getProfileImage(
+                                      cameraOrGallery: false);
+                                  pop();
+                                },
+                              ),
+                              PButton(
+                                text: "Gallery",
+                                height: size.height * 0.08,
+                                width: size.width * 0.4,
+                                backgroundColor: PColors.buttonColor,
+                                onTap: () {
+                                  editProfileController.getProfileImage(
+                                      cameraOrGallery: true);
+                                  pop();
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      });
+                },
                 child: editProfileController.profileImage != null
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(100),
@@ -159,13 +159,13 @@ class _EditProfileUserState extends State<EditProfileUser> {
                             ),
                           ),
               ),
-              editProfileController.imageTakingState == DataState.loading
-                  ? const Center(
-                      child: LoaderBouch(),
-                    )
-                  : const SizedBox.shrink(),
-            ],
-          ),
+            ),
+            editProfileController.imageTakingState == DataState.loading
+                ? const Center(
+                    child: LoaderBouch(),
+                  )
+                : const SizedBox.shrink(),
+          ],
         );
       }),
     );

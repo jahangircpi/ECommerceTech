@@ -48,6 +48,7 @@ class CAuth extends GetxController {
       signInDataState = DataState.loaded;
 
       notify();
+
       return user;
     } on FirebaseAuthException catch (e) {
       signInDataState = DataState.error;
@@ -86,15 +87,17 @@ class CAuth extends GetxController {
         TaskSnapshot storageTaskSnapshot = await task;
         storageTaskSnapshot.ref.getDownloadURL().then((downloadUrl) {
           dataEntry(
-            userId: auth.currentUser!.uid,
+            userId: value.user!.uid,
             fullName: fullName!,
             phoneNumber: phoneNumber,
             email: email,
             profileImage: downloadUrl,
           );
         });
-        return user;
+        profileImage = null;
+        return value.user;
       });
+
       pushReplacement(
         screen: HomeScreen(),
       );
@@ -118,8 +121,6 @@ class CAuth extends GetxController {
     pushAndRemoveUntil(
       screen: const SignInScreen(),
     );
-
-    printer('signout');
   }
 
   dataEntry({

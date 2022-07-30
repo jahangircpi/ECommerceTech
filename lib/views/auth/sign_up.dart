@@ -127,80 +127,72 @@ class _SignUpScreenState extends State<SignUpScreen> {
   GetBuilder<CAuth> imageSection(Size size) {
     return GetBuilder<CAuth>(
       builder: ((authController) {
-        return InkWell(
-          onTap: () {
-            showModalBottomSheet(
-                context: context,
-                builder: (builder) {
-                  return Container(
-                    height: size.height * 0.1,
-                    decoration: const BoxDecoration(
-                      color: PColors.backgroundColor,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        PButton(
-                          text: "Camera",
-                          height: size.height * 0.08,
-                          width: size.width * 0.4,
-                          backgroundColor: PColors.buttonColor,
-                          onTap: () {
-                            authController.getProfileImage(
-                                cameraOrGallery: false);
-                            pop();
-                          },
-                        ),
-                        PButton(
-                          text: "Gallery",
-                          height: size.height * 0.08,
-                          width: size.width * 0.4,
-                          backgroundColor: PColors.buttonColor,
-                          onTap: () {
-                            authController.getProfileImage(
-                                cameraOrGallery: true);
-                            pop();
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                });
-          },
-          child: Stack(
-            children: [
-              Center(
-                child: Container(
-                  width: size.width * 0.5,
-                  height: size.height * 0.2,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.white,
-                    ),
-                    shape: BoxShape.circle,
-                    image: authController.profileImage == null
-                        ? const DecorationImage(
-                            image: AssetImage(
-                              PAssets.personLogo,
+        return Stack(
+          children: [
+            Center(
+              child: InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                        context: context,
+                        builder: (builder) {
+                          return Container(
+                            height: size.height * 0.1,
+                            decoration: const BoxDecoration(
+                              color: PColors.backgroundColor,
                             ),
-                            fit: BoxFit.contain,
-                          )
-                        : DecorationImage(
-                            image: FileImage(
-                              authController.profileImage!,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                PButton(
+                                  text: "Camera",
+                                  height: size.height * 0.08,
+                                  width: size.width * 0.4,
+                                  backgroundColor: PColors.buttonColor,
+                                  onTap: () {
+                                    authController.getProfileImage(
+                                        cameraOrGallery: false);
+                                    pop();
+                                  },
+                                ),
+                                PButton(
+                                  text: "Gallery",
+                                  height: size.height * 0.08,
+                                  width: size.width * 0.4,
+                                  backgroundColor: PColors.buttonColor,
+                                  onTap: () {
+                                    authController.getProfileImage(
+                                        cameraOrGallery: true);
+                                    pop();
+                                  },
+                                ),
+                              ],
                             ),
-                            fit: BoxFit.contain,
+                          );
+                        });
+                  },
+                  child: authController.profileImage != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: Image.file(
+                            authController.profileImage!,
+                            height: size.height * 0.2,
+                            width: size.width * 0.4,
+                            fit: BoxFit.cover,
                           ),
-                  ),
-                ),
-              ),
-              authController.imageTakingState == DataState.loading
-                  ? const Center(
-                      child: LoaderBouch(),
-                    )
-                  : const SizedBox.shrink(),
-            ],
-          ),
+                        )
+                      : Image.asset(
+                          PAssets.personLogo,
+                          height: size.height * 0.2,
+                          width: size.width * 0.4,
+                          fit: BoxFit.cover,
+                        )),
+            ),
+            authController.imageTakingState == DataState.loading
+                ? const Center(
+                    child: LoaderBouch(),
+                  )
+                : const SizedBox.shrink(),
+          ],
         );
       }),
     );

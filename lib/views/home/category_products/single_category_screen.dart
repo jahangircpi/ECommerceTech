@@ -2,7 +2,6 @@ import 'package:boilerplate/controllers/products/category_controller.dart';
 import 'package:boilerplate/models/products_lists_model.dart';
 import 'package:boilerplate/utilities/constants/assets.dart';
 import 'package:boilerplate/utilities/functions/callback.dart';
-import 'package:boilerplate/utilities/functions/print.dart';
 import 'package:boilerplate/utilities/widgets/loader/loader.dart';
 import 'package:boilerplate/utilities/widgets/network_image.dart';
 import 'package:boilerplate/utilities/widgets/textfield.dart';
@@ -36,7 +35,6 @@ class _SingleCategoryProductsScreenState
   void initState() {
     super.initState();
     callBack(() {
-      printer(widget.titleofPage);
       SharedPreferencesService.instance
           .getString(widget.titleofPage)
           .then((value) async {

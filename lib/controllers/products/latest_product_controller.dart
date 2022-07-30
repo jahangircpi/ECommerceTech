@@ -15,7 +15,6 @@ class CLatestProducts extends GetxController {
       SharedPreferencesService.instance
           .getString(PKeys.latestProducts)
           .then((value) {
-        printer(value);
         if (value.isNotEmpty) {
           latestProductsLists = MProducts.decode(value);
           getDataController(dataState: DataState.loaded);

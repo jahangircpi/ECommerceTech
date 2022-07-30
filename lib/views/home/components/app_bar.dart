@@ -1,4 +1,3 @@
-import 'package:boilerplate/utilities/functions/print.dart';
 import 'package:boilerplate/utilities/services/navigation.dart';
 import 'package:boilerplate/utilities/widgets/network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -32,7 +31,6 @@ class AppBarHome extends StatelessWidget {
           children: [
             GetBuilder<CAuth>(
               builder: ((autController) {
-                printer(authController.user!.uid);
                 return StreamBuilder(
                   stream: PKeys.userCollection
                       .where(
@@ -43,7 +41,6 @@ class AppBarHome extends StatelessWidget {
                   builder:
                       ((context, AsyncSnapshot<QuerySnapshot> personalPost) {
                     if (personalPost.hasData) {
-                      printer(personalPost.data!.docs.length);
                       var users = personalPost.data!.docs[0];
                       return personalPost.data!.docs.isEmpty
                           ? const SizedBox.shrink()

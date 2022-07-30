@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:boilerplate/models/products_lists_model.dart';
 import 'package:boilerplate/utilities/constants/keys.dart';
-import 'package:boilerplate/utilities/functions/print.dart';
 import 'package:boilerplate/utilities/services/shared_pref.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
@@ -57,7 +56,6 @@ class CCategory extends GetxController {
 
       categoryDataState = DataState.loaded;
     } catch (e) {
-      printer('or here');
       categoryDataState = DataState.error;
     }
     notify();
