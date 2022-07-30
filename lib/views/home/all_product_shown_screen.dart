@@ -48,6 +48,7 @@ class ProductsShownScreen extends StatelessWidget {
                               listName: productLists!,
                             );
                           },
+                          labelHide: true,
                         );
                       }),
                     ),

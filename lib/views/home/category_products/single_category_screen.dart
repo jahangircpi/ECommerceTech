@@ -92,6 +92,7 @@ class _SingleCategoryProductsScreenState
                                   .singleCategoryProductsLists,
                             );
                           },
+                          labelHide: true,
                         );
                       }),
                     ),

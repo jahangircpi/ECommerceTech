@@ -8,6 +8,7 @@ import 'package:ud_design/ud_design.dart';
 import '../../controllers/auth/auth_controller.dart';
 import '../../utilities/constants/enums.dart';
 import '../../utilities/functions/gap.dart';
+import '../../utilities/services/email_verified.dart';
 import '../../utilities/services/navigation.dart';
 import '../../utilities/widgets/loader/loader.dart';
 import '../../utilities/widgets/textfield.dart';
@@ -22,6 +23,7 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   TextEditingController emailTxtCtrl = TextEditingController();
   TextEditingController passWordTxtCtrl = TextEditingController();
+  final ValueNotifier<bool> _isValidEmail = ValueNotifier<bool>(false);
   @override
   void dispose() {
     emailTxtCtrl.dispose();
@@ -43,8 +45,23 @@ class _SignInScreenState extends State<SignInScreen> {
               children: <Widget>[
                 PTextField(
                   controller: emailTxtCtrl,
-                  hintText: 'ex: jahangircpi@gmail.com',
-                  label: "Email Address",
+                  label: "Email",
+                  onChanged: (v) {
+                    _isValidEmail.value = isValidEmail(v);
+                  },
+                  hintText: "input your email",
+                  suffixIcon: ValueListenableBuilder<bool>(
+                    builder: (_, value, child) {
+                      if (value) {
+                        return const Icon(
+                          Icons.check,
+                          color: Colors.green,
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
+                    valueListenable: _isValidEmail,
+                  ),
                 ),
                 gapY(10),
                 GetBuilder<CAuth>(
@@ -52,7 +69,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     return PTextField(
                       controller: passWordTxtCtrl,
                       obsecureText: authController.passwordVisible,
-                      hintText: 'ex: *****',
+                      hintText: 'input your password',
                       label: "Password",
                       suffixIcon: InkWell(
                         onTap: () {
@@ -69,7 +86,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     );
                   }),
                 ),
-                gapY(30),
+                gapY(20),
                 signInButton(),
                 gapY(40),
                 signInDontHaveSection()
@@ -97,6 +114,11 @@ class _SignInScreenState extends State<SignInScreen> {
                 pSnacbar(
                     text: "Oops",
                     title: "The Password's field is empty",
+                    snackBarType: SnackBarType.warning);
+              } else if (_isValidEmail.value == false) {
+                pSnacbar(
+                    text: "Oops",
+                    title: "Input a valid email",
                     snackBarType: SnackBarType.warning);
               } else {
                 authController.signIn(

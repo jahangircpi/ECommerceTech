@@ -3,6 +3,8 @@ import 'package:boilerplate/utilities/constants/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:ud_design/ud_design.dart';
 
+import '../functions/gap.dart';
+
 class PTextField extends StatelessWidget {
   final double height;
   final double width;
@@ -12,30 +14,38 @@ class PTextField extends StatelessWidget {
   final bool obsecureText;
   final TextEditingController controller;
   final void Function(String)? onChanged;
-  const PTextField(
-      {Key? key,
-      this.label,
-      this.suffixIcon,
-      required this.hintText,
-      required this.controller,
-      this.height = PThemes.height,
-      this.onChanged,
-      this.width = double.infinity,
-      this.obsecureText = false})
-      : super(key: key);
+  final bool labelHide;
+  const PTextField({
+    Key? key,
+    this.label,
+    this.suffixIcon,
+    required this.hintText,
+    required this.controller,
+    this.height = PThemes.height,
+    this.onChanged,
+    this.width = double.infinity,
+    this.obsecureText = false,
+    this.labelHide = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Text(
-        //   label ?? "",
-        //   style: TextStyle(
-        //     fontSize: UdDesign.fontSize(16),
-        //   ),
-        // ),
-        // gapY(10),
+        labelHide == true
+            ? const SizedBox.shrink()
+            : Column(
+                children: [
+                  Text(
+                    label ?? "",
+                    style: TextStyle(
+                      fontSize: UdDesign.fontSize(16),
+                    ),
+                  ),
+                  gapY(10),
+                ],
+              ),
         Container(
           height: UdDesign.pt(height),
           padding: const EdgeInsets.only(left: PThemes.padding),

@@ -10,6 +10,7 @@ import '../../controllers/auth/auth_controller.dart';
 import '../../utilities/constants/colors.dart';
 import '../../utilities/constants/enums.dart';
 import '../../utilities/functions/gap.dart';
+import '../../utilities/services/email_verified.dart';
 import '../../utilities/services/navigation.dart';
 import '../../utilities/widgets/loader/loader.dart';
 import '../../utilities/widgets/textfield.dart';
@@ -26,6 +27,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController phoneNumTxtCtrl = TextEditingController();
   TextEditingController emailTxtCtrl = TextEditingController();
   TextEditingController passwordTxtCtrl = TextEditingController();
+  final ValueNotifier<bool> _isValidEmail = ValueNotifier<bool>(false);
+
   @override
   void dispose() {
     fullNameTxtCtrl.dispose();
@@ -53,20 +56,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     imageSection(size),
                     PTextField(
                       controller: fullNameTxtCtrl,
-                      hintText: 'ex: Jahangir Alam',
+                      hintText: 'input your name',
                       label: "Full Name",
                     ),
                     gapY(10),
                     PTextField(
                       controller: phoneNumTxtCtrl,
-                      hintText: 'ex: +8801700000000',
+                      hintText: 'input your phone number',
                       label: "Phone Number",
                     ),
                     gapY(10),
                     PTextField(
                       controller: emailTxtCtrl,
-                      hintText: 'ex: jahangircpi@gmail.com',
-                      label: "Email Address",
+                      label: "Email",
+                      onChanged: (v) {
+                        _isValidEmail.value = isValidEmail(v);
+                      },
+                      hintText: "input your email",
+                      suffixIcon: ValueListenableBuilder<bool>(
+                        builder: (_, value, child) {
+                          if (value) {
+                            return const Icon(
+                              Icons.check,
+                              color: Colors.green,
+                            );
+                          }
+                          return const SizedBox.shrink();
+                        },
+                        valueListenable: _isValidEmail,
+                      ),
                     ),
                     gapY(10),
                     GetBuilder<CAuth>(
@@ -75,7 +93,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           obsecureText: authController.passwordVisible,
                           controller: passwordTxtCtrl,
                           label: 'Password',
-                          hintText: 'ex: *****',
+                          hintText: 'input your password',
                           suffixIcon: InkWell(
                             onTap: () {
                               if (authController.passwordVisible == true) {
@@ -214,6 +232,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 pSnacbar(
                     text: "Oops",
                     title: "The email's field is empty",
+                    snackBarType: SnackBarType.warning);
+              } else if (_isValidEmail.value == false) {
+                pSnacbar(
+                    text: "Oops",
+                    title: "Input a valid email",
                     snackBarType: SnackBarType.warning);
               } else if (passwordTxtCtrl.text.isEmpty) {
                 pSnacbar(
