@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:boilerplate/controllers/products/search_controller.dart';
 import 'package:boilerplate/models/products_lists_model.dart';
 import 'package:boilerplate/utilities/widgets/network_image.dart';
@@ -19,7 +20,6 @@ class ProductWithListSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -67,88 +67,90 @@ class ProductWithListSection extends StatelessWidget {
               itemCount: productLists.length,
               itemBuilder: (_, index) {
                 MProducts items = productLists[index];
+
                 return Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: size.width * 0.00001),
-                  child: GestureDetector(
-                    onTap: () {
-                      push(
-                        screen: ProductScreen(
+                  padding: EdgeInsets.symmetric(horizontal: UdDesign.pt(4)),
+                  child: OpenContainer(
+                      closedColor: Colors.transparent,
+                      closedBuilder: ((context, action) {
+                        return SizedBox(
+                          width: UdDesign.pt(130),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: UdDesign.pt(12),
+                              vertical: UdDesign.pt(10),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                items.image == null
+                                    ? Image.asset(items.image ?? "")
+                                    : networkImagescall(
+                                        src: items.image!,
+                                        height: 80.0,
+                                        fit: BoxFit.contain,
+                                      ),
+                                gapY(5),
+                                Text(
+                                  items.title!,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      fontSize: UdDesign.fontSize(12),
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                gapY(4),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Price",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: UdDesign.fontSize(11),
+                                      ),
+                                    ),
+                                    Text(
+                                      "৳${items.price!.toString()}",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: UdDesign.fontSize(11),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Rating",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: UdDesign.fontSize(11),
+                                      ),
+                                    ),
+                                    Text(
+                                      "${items.rating?.rate ?? ""}",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: UdDesign.fontSize(11),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                gapY(7),
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                      openBuilder: (context, action) {
+                        return ProductScreen(
                           products: items,
-                        ),
-                      );
-                    },
-                    child: SizedBox(
-                      width: UdDesign.pt(130),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: UdDesign.pt(12),
-                          vertical: UdDesign.pt(10),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            items.image == null
-                                ? Image.asset(items.image ?? "")
-                                : networkImagescall(
-                                    src: items.image!,
-                                    height: 80.0,
-                                    fit: BoxFit.contain,
-                                  ),
-                            gapY(5),
-                            Text(
-                              items.title!,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  fontSize: UdDesign.fontSize(12),
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            gapY(4),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Price",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: UdDesign.fontSize(11),
-                                  ),
-                                ),
-                                Text(
-                                  "৳${items.price!.toString()}",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: UdDesign.fontSize(11),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Rating",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: UdDesign.fontSize(11),
-                                  ),
-                                ),
-                                Text(
-                                  "${items.rating?.rate ?? ""}",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: UdDesign.fontSize(11),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            gapY(7),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                        );
+                      }),
                 );
               }),
         )

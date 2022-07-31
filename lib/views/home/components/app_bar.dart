@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:boilerplate/utilities/services/navigation.dart';
 import 'package:boilerplate/utilities/widgets/network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -46,8 +47,14 @@ class AppBarHome extends StatelessWidget {
                           ? const SizedBox.shrink()
                           : InkWell(
                               onTap: () {
-                                showDialog(
+                                showModal(
                                   context: context,
+                                  configuration:
+                                      const FadeScaleTransitionConfiguration(
+                                    transitionDuration: Duration(
+                                      seconds: 1,
+                                    ),
+                                  ),
                                   builder: (BuildContext context) =>
                                       CustomDialog(
                                     widget: Column(
@@ -154,8 +161,21 @@ class AppBarHome extends StatelessWidget {
                 );
               }),
             ),
-            const Text(
-              "Home",
+            InkWell(
+              onTap: () {
+                showModal(
+                    context: context,
+                    configuration: const FadeScaleTransitionConfiguration(),
+                    builder: (context) {
+                      return const AlertDialog(
+                        title: Text("Modal title"),
+                        content: Text("This is the modal content"),
+                      );
+                    });
+              },
+              child: const Text(
+                "Home",
+              ),
             ),
             const SizedBox(),
           ],

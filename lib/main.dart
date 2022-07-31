@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:boilerplate/checkpoint.dart';
 import 'package:boilerplate/utilities/constants/colors.dart';
 import 'package:boilerplate/utilities/constants/keys.dart';
@@ -13,6 +14,14 @@ void main() async {
       navigatorKey: PKeys.navigatorKey,
       home: const CheckPoint(),
       theme: ThemeData(
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: <TargetPlatform, PageTransitionsBuilder>{
+            TargetPlatform.android: SharedAxisPageTransitionsBuilder(
+              transitionType: SharedAxisTransitionType.horizontal,
+              fillColor: Colors.transparent,
+            ),
+          },
+        ),
         scaffoldBackgroundColor: PColors.backgroundColor,
         textTheme: const TextTheme(
           bodyText1: TextStyle(),
