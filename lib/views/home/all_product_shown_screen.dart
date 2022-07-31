@@ -1,5 +1,7 @@
+import 'package:animations/animations.dart';
 import 'package:boilerplate/models/products_lists_model.dart';
 import 'package:boilerplate/utilities/constants/assets.dart';
+import 'package:boilerplate/utilities/constants/colors.dart';
 import 'package:boilerplate/utilities/widgets/network_image.dart';
 import 'package:boilerplate/utilities/widgets/textfield.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:ud_design/ud_design.dart';
 import '../../../utilities/constants/themes.dart';
 import '../../../utilities/functions/gap.dart';
-import '../../../utilities/services/navigation.dart';
 import '../../../utilities/widgets/back_button.dart';
 import '../../controllers/products/search_controller.dart';
 import 'details_product.dart';
@@ -52,6 +53,7 @@ class ProductsShownScreen extends StatelessWidget {
                         );
                       }),
                     ),
+                    gapY(5),
                     GetBuilder<CSearch>(
                       builder: ((serchController) {
                         return GridView.builder(
@@ -61,69 +63,70 @@ class ProductsShownScreen extends StatelessWidget {
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2,
-                                  mainAxisSpacing: UdDesign.pt(2),
-                                  crossAxisSpacing: UdDesign.pt(5),
+                                  mainAxisSpacing: UdDesign.pt(10),
+                                  crossAxisSpacing: UdDesign.pt(10),
                                   childAspectRatio: 0.9),
                           itemBuilder: (context, index) {
                             MProducts items =
                                 serchController.searchLists[index];
-                            return GestureDetector(
-                              onTap: () {
-                                push(
-                                  screen: ProductScreen(
-                                    products: items,
-                                  ),
-                                );
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: UdDesign.pt(12),
-                                  vertical: UdDesign.pt(5),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    items.image == null
-                                        ? Image.asset(PAssets.personLogo)
-                                        : networkImagescall(
-                                            src: items.image ?? "",
-                                            fit: BoxFit.contain,
-                                          ),
-                                    gapY(5),
-                                    Text(
-                                      items.title ?? "",
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          fontSize: UdDesign.fontSize(12),
-                                          fontWeight: FontWeight.w600),
+                            return OpenContainer(
+                                closedColor: PColors.openContainerBoxColor,
+                                closedBuilder: ((context, action) {
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: UdDesign.pt(12),
+                                      vertical: UdDesign.pt(5),
                                     ),
-                                    gapY(4),
-                                    Row(
+                                    child: Column(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.center,
                                       children: [
+                                        items.image == null
+                                            ? Image.asset(PAssets.personLogo)
+                                            : networkImagescall(
+                                                src: items.image ?? "",
+                                                fit: BoxFit.contain,
+                                              ),
+                                        gapY(5),
                                         Text(
-                                          "৳ ${items.price!.toString()}",
+                                          items.title ?? "",
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: UdDesign.fontSize(11),
-                                          ),
+                                              fontSize: UdDesign.fontSize(12),
+                                              fontWeight: FontWeight.w600),
                                         ),
-                                        Text(
-                                          'Rating: ${items.rating?.rate ?? ""}',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: UdDesign.fontSize(11),
-                                          ),
+                                        gapY(4),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "৳ ${items.price!.toString()}",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: UdDesign.fontSize(11),
+                                              ),
+                                            ),
+                                            Text(
+                                              'Rating: ${items.rating?.rate ?? ""}',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: UdDesign.fontSize(11),
+                                              ),
+                                            ),
+                                          ],
                                         ),
+                                        gapY(7),
                                       ],
                                     ),
-                                    gapY(7),
-                                  ],
-                                ),
-                              ),
-                            );
+                                  );
+                                }),
+                                openBuilder: (context, action) {
+                                  return ProductScreen(
+                                    products: items,
+                                  );
+                                });
                           },
                         );
                       }),

@@ -5,6 +5,7 @@ import 'package:boilerplate/utilities/widgets/network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ud_design/ud_design.dart';
+import '../../../utilities/constants/colors.dart';
 import '../../../utilities/functions/gap.dart';
 import '../../../utilities/services/navigation.dart';
 import '../all_product_shown_screen.dart';
@@ -67,11 +68,12 @@ class ProductWithListSection extends StatelessWidget {
               itemCount: productLists.length,
               itemBuilder: (_, index) {
                 MProducts items = productLists[index];
-
                 return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: UdDesign.pt(4)),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: UdDesign.pt(4),
+                  ),
                   child: OpenContainer(
-                      closedColor: Colors.transparent,
+                      closedColor: PColors.openContainerBoxColor,
                       closedBuilder: ((context, action) {
                         return SizedBox(
                           width: UdDesign.pt(130),

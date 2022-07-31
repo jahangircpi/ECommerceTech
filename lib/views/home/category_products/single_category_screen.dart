@@ -142,7 +142,7 @@ class _SingleCategoryProductsScreenState
             MProducts items = searchController.searchLists[index];
 
             return OpenContainer(
-                closedColor: PColors.backgroundColor,
+                closedColor: PColors.openContainerBoxColor,
                 closedBuilder: ((context, action) {
                   return Padding(
                     padding: EdgeInsets.symmetric(

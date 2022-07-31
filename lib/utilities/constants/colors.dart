@@ -6,4 +6,5 @@ class PColors {
   static const textFieldColor = Colors.white;
   static const backgroundColor = Color(0xFF129C95);
   static const buttonColor = Color(0xFF4a6572);
+  static const openContainerBoxColor = Colors.transparent;
 }
