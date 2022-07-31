@@ -10,6 +10,7 @@ import '../../utilities/services/navigation.dart';
 class ProductScreen extends StatelessWidget {
   final MProducts? products;
   const ProductScreen({Key? key, this.products}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -82,15 +83,17 @@ class ProductScreen extends StatelessWidget {
       children: [
         gapY(10),
         Center(
-          child: products!.image == null
-              ? Image.asset(PAssets.personLogo)
-              : networkImagescall(
-                  src: products!.image ?? "",
-                  height: UdDesign.pt(200),
-                  width: double.infinity,
-                  fit: BoxFit.contain,
-                ),
-        ),
+            child: products!.image == null
+                ? Image.asset(PAssets.personLogo)
+                : InteractiveViewer(
+                    clipBehavior: Clip.none,
+                    child: networkImagescall(
+                      src: products!.image ?? "",
+                      height: UdDesign.pt(200),
+                      width: double.infinity,
+                      fit: BoxFit.contain,
+                    ),
+                  )),
         gapY(15),
         Text(
           products!.title ?? "",
